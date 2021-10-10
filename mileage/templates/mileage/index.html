@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ title }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+    <ol class="list-group list-group-numbered">
+        {% for car in cars %}
+            <li class="list-group-item"><a href="car/{{ car.id }}">{{ car }}</a></li>
+        {% endfor %}
+    </ol>
+{% endblock %}

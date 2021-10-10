@@ -7,7 +7,6 @@ class SparePartAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'brand', 'number')
     list_display_links = ('id', 'name', 'brand', 'number')
     search_fields = ('name', 'brand', 'number')
-    # list_editable = ('is_published',)
     list_filter = ('name', 'brand')
 
 
