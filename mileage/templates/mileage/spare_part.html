@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<h1>{{ title }} {{ brand }} {{ model_name }} {{ car_age }} г./в.</h1>
+<h1>{{ title }} {{ brand }} {{ model_name }} {{ model_variant }} {{ car_age }} г./в.</h1>
     <ol class="list-group list-group-numbered">
         {% for item in spare_parts %}
-            <li class="list-group-item">{{ item }}</li>
+            <li class="list-group-item">{{ item }} - {{ item.mileage }} тыс.км.</li>
         {% endfor %}
     </ol>
+    Мин {{ min_mileage }}<br>
+    Макс {{ max_mileage }}<br>
+    Среднее {{ avg_mileage }}<br>
 {% endblock %}

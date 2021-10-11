@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.db.models import Avg, Max, Min
 
 from .models import Car, SparePart, Mileage
 
 
 def index(request):
+    """ получаем список всех добавленных авто без учета записей о пробеге запчастей """
     cars = Car.objects.all()
     context = {
         'cars': cars,
@@ -13,6 +15,7 @@ def index(request):
 
 
 def get_car_spare_parts(request, car_id):
+    """ получаем список запчастей для конкретной марки и модели авто """
     # TODO сделать DISTINCT
     spare_parts = Mileage.objects.filter(car_id=car_id)
     car = Car.objects.get(id=car_id)
@@ -28,16 +31,21 @@ def get_car_spare_parts(request, car_id):
 
 
 def get_spare_parts_mileages(request, car_id, spare_part_id):
-    spare_parts = Mileage.objects.filter(car_id=car_id, spare_part_id=spare_part_id)
-    # reports = spare_parts.filter(spare_part_id)
-    # car = Car.objects.get(id=spare_part_id)
+    """ получаем список всех записей о пробеге для конкретной запчасти а также конкретной марки и модели авто """
+    spare_parts = Mileage.objects.filter(car_id=car_id, spare_part_id=spare_part_id).order_by('-mileage')
+    car = Car.objects.get(id=spare_part_id)
+    max_mileage = spare_parts.aggregate(Max('mileage'))
+    min_mileage = spare_parts.aggregate(Min('mileage'))
+    avg_mileage = spare_parts.aggregate(Avg('mileage'))
     context = {
         'spare_parts': spare_parts,
-        # 'reports': reports,
         'title': 'Список пробегов запчасти для',
-        # 'model_name': car.model_name,
-        # 'brand': car.brand,
-        # 'car_age': car.age,
-
+        'model_name': car.model_name,
+        'model_variant': car.model_variant,
+        'brand': car.brand,
+        'car_age': car.age,
+        'min_mileage': min_mileage['mileage__min'],
+        'max_mileage': max_mileage['mileage__max'],
+        'avg_mileage': avg_mileage['mileage__avg'],
     }
     return render(request, 'mileage/spare_part.html', context)
