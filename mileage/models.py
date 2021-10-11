@@ -36,8 +36,9 @@ class Mileage(models.Model):
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
 
     def __str__(self):
-        return ' '.join([self.spare_part.name, "на", self.car.brand, self.car.model_name])
+        return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
 
     class Meta:
         verbose_name = 'Пробег'
         verbose_name_plural = 'Пробег'
+        ordering = ['spare_part']
