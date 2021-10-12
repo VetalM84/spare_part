@@ -13,10 +13,47 @@
             <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
-    Мин {{ min_mileage }}<br>
-    Макс {{ max_mileage }}<br>
-    Среднее {{ avg_mileage }}<br>
-    Всего записей {{ records_count }}<br>
+<div class="row" style="margin-top: 20px">
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-header">
+        Минимальный пробег
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ min_mileage }} тыс.км.</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-header">
+        Максимальный пробег
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ max_mileage }} тыс.км.</h5>
+      </div>
+    </div>
+    </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-header">
+        Средний пробег
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ avg_mileage }} тыс.км.</h5>
+      </div>
+    </div>
+    </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-header">
+        Всего записей
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ records_count }} шт.</h5>
+      </div>
+    </div>
+    </div>
 
     <h2>Похожие запчасти</h2>
     <ol class="list-group list-group-numbered">
