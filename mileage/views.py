@@ -38,7 +38,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
     records_count = spare_parts.count()
 
-    car = Car.objects.get(id=spare_part_id)
+    car = Car.objects.get(id=car_id)
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)

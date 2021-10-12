@@ -9,6 +9,8 @@
     <ol class="list-group list-group-numbered">
         {% for item in spare_parts %}
             <li class="list-group-item">{{ item }} - {{ item.mileage }} тыс.км.</li>
+        {% empty %}
+            <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
     Мин {{ min_mileage }}<br>
@@ -21,6 +23,8 @@
         {% for item in similar_spare_parts|slice:':7' %}
             <li class="list-group-item"><a href="{% url 'spare_parts_mileages' item.car_id item.spare_part_id %}">
                 {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
+        {% empty %}
+            <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
 
