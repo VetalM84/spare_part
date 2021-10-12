@@ -14,4 +14,13 @@
     Мин {{ min_mileage }}<br>
     Макс {{ max_mileage }}<br>
     Среднее {{ avg_mileage }}<br>
+    Всего записей {{ records_count }}<br>
+
+    <h2>Похожие запчасти</h2>
+    <ol class="list-group list-group-numbered">
+        {% for item in similar_spare_parts|slice:':7' %}
+            <li class="list-group-item">{{ item }}</li>
+        {% endfor %}
+    </ol>
+
 {% endblock %}
