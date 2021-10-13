@@ -47,6 +47,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
 
     context = {
         'spare_parts': spare_parts,
+        'similar_spare_parts': similar_spare_parts,
         'title': 'Список пробегов запчасти для',
         'model_name': car.model_name,
         'model_variant': car.model_variant,
@@ -56,6 +57,5 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
         'records_count': records_count,
-        'similar_spare_parts': similar_spare_parts,
     }
     return render(request, 'mileage/spare_part.html', context)
