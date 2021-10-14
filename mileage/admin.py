@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import SparePart, Car, Mileage
+from .models import SparePart, Car, Mileage, Profile
 
 
 class SparePartAdmin(admin.ModelAdmin):
@@ -24,6 +24,14 @@ class MileageAdmin(admin.ModelAdmin):
     list_filter = ('spare_part', 'car')
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nikname', 'drive2_link')
+    list_display_links = ('id', 'nikname', 'drive2_link')
+    search_fields = ('nikname', 'cars')
+    list_filter = ('cars',)
+
+
 admin.site.register(SparePart, SparePartAdmin)
 admin.site.register(Car, CarAdmin)
 admin.site.register(Mileage, MileageAdmin)
+admin.site.register(Profile, ProfileAdmin)
