@@ -18,16 +18,16 @@ class CarAdmin(admin.ModelAdmin):
 
 
 class MileageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'spare_part', 'car', 'mileage')
-    list_display_links = ('id', 'spare_part', 'car')
+    list_display = ('id', 'spare_part', 'car', 'mileage', 'owner')
+    list_display_links = ('id', 'spare_part', 'car', 'owner')
     search_fields = ('spare_part', 'car')
     list_filter = ('spare_part', 'car')
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nikname', 'drive2_link')
-    list_display_links = ('id', 'nikname', 'drive2_link')
-    search_fields = ('nikname', 'cars')
+    list_display = ('id', 'user', 'nikname', 'drive2_link')
+    list_display_links = ('id', 'user', 'nikname', 'drive2_link')
+    search_fields = ('user', 'nikname', 'cars')
     list_filter = ('cars',)
 
 

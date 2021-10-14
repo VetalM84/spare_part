@@ -37,8 +37,7 @@ class Mileage(models.Model):
     spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, verbose_name="Запчасть")
     car = models.ForeignKey('Car', on_delete=models.PROTECT, verbose_name="Автомобиль")
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
-
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
 
     def __str__(self):
         return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
@@ -54,6 +53,9 @@ class Profile(models.Model):
     nikname = models.CharField(max_length=30, verbose_name="Никнейм")
     drive2_link = models.URLField(blank=True, verbose_name="Ссылка на профиль Drive2.ru")
     cars = models.ManyToManyField(Car, blank=True, verbose_name="Мои автомобили")
+
+    def __str__(self):
+        return self.nikname
 
     class Meta:
         verbose_name = 'Профиль'
