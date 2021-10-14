@@ -1,1 +1,1 @@
-web: gunicorn spare_part.wsgi
+web: gunicorn mileage.wsgi
