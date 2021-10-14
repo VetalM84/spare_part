@@ -1,1 +1,1 @@
-web: gunicorn mileage.wsgi
+web: gunicorn core.wsgi --log-file=-
