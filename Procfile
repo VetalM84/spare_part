@@ -1,0 +1,1 @@
+web: gunicorn spare_part.wsgi
