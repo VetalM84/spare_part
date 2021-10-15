@@ -16,7 +16,7 @@
     <h3>Мои авто</h3>
     <ol class="list-group list-group-numbered">
         {% for item in user.profile.cars.all %}
-            <li class="list-group-item">{{ item }}</li>
+            <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
         {% empty %}
             <li class="list-group-item">У вас еще нет машин</li>
         {% endfor %}

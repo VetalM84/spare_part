@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Min
 
 from .models import Car, Mileage
+from .forms import AddCarForm, AddMileageForm, AddSparePartForm
 
 
 def index(request):
@@ -25,7 +26,6 @@ def get_car_spare_parts(request, car_id):
         # 'model_name': car.model_name,
         # 'brand': car.brand,
         # 'car_age': car.age,
-
     }
     return render(request, 'mileage/car.html', context)
 
@@ -69,3 +69,20 @@ def get_user_profile(request, user_id):
     }
     return render(request, 'mileage/user_profile.html', context)
 
+
+def add_mileage(request):
+    if request.method == 'POST':
+        car_form = AddCarForm(request.POST)
+        spare_part_form = AddSparePartForm(request.POST)
+        mileage_form = AddMileageForm(request.POST)
+    else:
+        car_form = AddCarForm()
+        spare_part_form = AddSparePartForm()
+        mileage_form = AddMileageForm()
+    context = {
+        'title': 'Добавить отчет о пробеге',
+        'car_form': car_form,
+        'spare_part_form': spare_part_form,
+        'mileage_form': mileage_form,
+    }
+    return render(request, 'mileage/add_mileage.html', context)
