@@ -64,11 +64,12 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
 def get_user_profile(request, user_id):
     user = User.objects.get(id=user_id)
     user_reports = Mileage.objects.filter(owner_id=user_id)
+    print(user.id)
     context = {
         'title': 'Мой профиль',
         'user': user,
         'user_id': user.id,
-        'user_cars': user.profile.cars,
+        'user_cars': user.profile.cars.all,
         'user_reports': user_reports
     }
     return render(request, 'mileage/user_profile.html', context)

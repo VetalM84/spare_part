@@ -11,11 +11,11 @@
         <li class="list-group-item">Имя: {{ user.first_name }}</li>
         <li class="list-group-item">Фамилия: {{ user.last_name }}</li>
         <li class="list-group-item">E-mail: {{ user.email }}</li>
-        <li class="list-group-item"><a href="{{ user.profile.drive2_link }}">Ссылка на профиль Drive2.ru</a></li>
+        <li class="list-group-item"><a href="{{ user.profile.drive2_link }}" target="_blank">Ссылка на профиль Drive2.ru</a></li>
     </ol>
     <h3>Мои авто</h3>
     <ol class="list-group list-group-numbered">
-        {% for item in user_cars.all %}
+        {% for item in user_cars %}
             <li class="list-group-item">{{ item }}</li>
         {% empty %}
             <li class="list-group-item">У вас еще нет машин</li>
