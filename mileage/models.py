@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse_lazy
 
 
 class Car(models.Model):
@@ -12,6 +13,9 @@ class Car(models.Model):
 
     def __str__(self):
         return ' '.join([self.brand, self.model_name, self.model_variant])
+
+    def get_absolute_url(self):
+        return reverse_lazy('car_spare_parts', kwargs={'car_id': self.pk})
 
     class Meta:
         verbose_name = 'Автомобиль'
