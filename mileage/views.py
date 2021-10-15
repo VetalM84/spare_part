@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Avg, Max, Min
 
-from .models import Car, SparePart, Mileage
+from .models import Car, Mileage, User
 
 
 def index(request):
@@ -59,3 +59,17 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
         'records_count': records_count,
     }
     return render(request, 'mileage/spare_part.html', context)
+
+
+def get_user_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+    user_reports = Mileage.objects.filter(owner_id=user_id)
+    context = {
+        'title': 'Мой профиль',
+        'user': user,
+        'user_id': user.id,
+        'user_cars': user.profile.cars,
+        'user_reports': user_reports
+    }
+    return render(request, 'mileage/user_profile.html', context)
+

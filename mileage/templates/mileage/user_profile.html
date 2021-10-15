@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ title }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+    <ol class="list-group">
+        <li class="list-group-item">Логин: {{ user.username }}</li>
+        <li class="list-group-item">Имя: {{ user.first_name }}</li>
+        <li class="list-group-item">Фамилия: {{ user.last_name }}</li>
+        <li class="list-group-item">E-mail: {{ user.email }}</li>
+        <li class="list-group-item"><a href="{{ user.profile.drive2_link }}">Ссылка на профиль Drive2.ru</a></li>
+    </ol>
+    <h3>Мои авто</h3>
+    <ol class="list-group list-group-numbered">
+        {% for item in user_cars.all %}
+            <li class="list-group-item">{{ item }}</li>
+        {% empty %}
+            <li class="list-group-item">У вас еще нет машин</li>
+        {% endfor %}
+    </ol>
+
+    <h3>Мои отчеты о запчастях</h3>
+    <ol class="list-group list-group-numbered">
+        {% for item in user_reports %}
+            <li class="list-group-item"><a href="{% url 'spare_parts_mileages' item.car_id item.spare_part_id %}">
+                {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
+        {% empty %}
+            <p>Еще ничего нет</p>
+        {% endfor %}
+    </ol>
+
+{% endblock %}

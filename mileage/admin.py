@@ -25,9 +25,9 @@ class MileageAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'nikname', 'drive2_link')
-    list_display_links = ('id', 'user', 'nikname', 'drive2_link')
-    search_fields = ('user', 'nikname', 'cars')
+    list_display = ('id', 'user', 'drive2_link')
+    list_display_links = ('id', 'user', 'drive2_link')
+    search_fields = ('user', 'cars')
     list_filter = ('cars',)
 
 
