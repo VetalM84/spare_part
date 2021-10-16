@@ -42,7 +42,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
-    similar_spare_parts = Mileage.objects.filter(car_id=car_id, spare_part__name__contains=spare_parts.first().
+    similar_spare_parts = Mileage.objects.filter(car_id=car_id, spare_part__name__icontains=spare_parts.first().
                                                  spare_part.name).exclude(spare_part_id=spare_part_id)
 
     context = {
