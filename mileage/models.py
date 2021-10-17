@@ -68,6 +68,9 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_absolute_url(self):
+        return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
+
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профиль'
