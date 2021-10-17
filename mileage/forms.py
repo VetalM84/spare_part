@@ -31,9 +31,10 @@ class AddMileageForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'spare_part': forms.Select(attrs={'class': 'form-control'}),
-            'car': forms.Select(attrs={'class': 'form-control'}),
+            'car': forms.Select(attrs={'class': 'form-select'}),
             'mileage': forms.NumberInput(attrs={'class': 'form-control'}),
-            'owner': forms.Select(attrs={'class': 'form-control'}),
+            'rating': forms.Select(attrs={'class': 'form-select'}),
+            'owner': forms.Select(attrs={'class': 'form-select'}),
         }
 
 
@@ -42,7 +43,7 @@ class ProfileEditForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         widgets = {
-            'user': forms.Select(attrs={'class': 'form-control'}),
+            'user': forms.Select(attrs={'class': 'form-select'}),
             'drive2_link': forms.URLInput(attrs={'class': 'form-control'}),
-            'cars': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'cars': forms.SelectMultiple(attrs={'class': 'form-select'}),
         }

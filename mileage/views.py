@@ -37,6 +37,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
+    avg_rating = spare_parts.aggregate(Avg('rating'))
     records_count = spare_parts.count()
 
     car = get_object_or_404(Car, pk=car_id)
@@ -57,6 +58,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
+        'avg_rating': avg_rating['rating__avg'],
         'records_count': records_count,
     }
     return render(request, 'mileage/spare_part.html', context)

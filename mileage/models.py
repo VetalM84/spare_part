@@ -38,9 +38,17 @@ class SparePart(models.Model):
 
 
 class Mileage(models.Model):
+    RATING_VALUES = [
+        (1, 'Ужасно'),
+        (2, 'Плохо'),
+        (3, 'Сносно'),
+        (4, 'Хорошо'),
+        (5, 'Отлично'),
+    ]
     spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, verbose_name="Запчасть")
     car = models.ForeignKey('Car', on_delete=models.PROTECT, verbose_name="Автомобиль")
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
+    rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
 
     def __str__(self):
