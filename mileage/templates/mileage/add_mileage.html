@@ -1,10 +1,38 @@
 {% extends 'base.html' %}
 
 {% block head %}
+    {% include 'inc/_autocomplete_links.html' %}
+
 <title>{{ title }}</title>
+
 {% endblock %}
+
 {% block body %}
     <h1>{{ title }}</h1>
+
+    <!-- autocomplete -->
+    <script>
+  $( function() {
+    var carBrands = [
+        {% for car in cars %}
+            "{{car.brand}}",
+        {% endfor %}
+    ];
+    var carModels = [
+       {% for car in cars %}
+            "{{car.model_name}}",
+        {% endfor %}
+    ];
+    $( "#id_brand" ).autocomplete({
+      source: carBrands
+    });
+    $( "#id_model_name" ).autocomplete({
+      source: carModels
+    });
+  } );
+  </script>
+    <!-- autocomplete end-->
+
     {% if request.user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}

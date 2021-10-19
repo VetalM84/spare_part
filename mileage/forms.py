@@ -6,7 +6,7 @@ class AddCarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = '__all__'
-        labels = {'model_variant': 'Поколение модели (например: 2, B6, F15, IV'}
+        labels = {'model_variant': 'Поколение модели (например: 2, B6, F15, IV)'}
         widgets = {
             'brand': forms.TextInput(attrs={'class': 'form-control'}),
             'model_name': forms.TextInput(attrs={'class': 'form-control'}),

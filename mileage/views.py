@@ -82,10 +82,14 @@ def add_mileage(request):
         car_form = AddCarForm()
         spare_part_form = AddSparePartForm()
         mileage_form = AddMileageForm()
+
+    cars = Car.objects.all()
+
     context = {
         'title': 'Добавить отчет о пробеге',
         'car_form': car_form,
         'spare_part_form': spare_part_form,
         'mileage_form': mileage_form,
+        'cars': cars,
     }
     return render(request, 'mileage/add_mileage.html', context)
