@@ -24,11 +24,14 @@
         {% endfor %}
     ];
     $( "#id_brand" ).autocomplete({
-      source: carBrands
+      source: carBrands,
+      minLength: 3
+
     });
     $( "#id_model_name" ).autocomplete({
-      source: carModels
-    });
+      source: carModels,
+      minLength: 3
+   });
   } );
   </script>
     <!-- autocomplete end-->
