@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 class Car(models.Model):
     brand = models.CharField(max_length=40, db_index=True, verbose_name="Марка")
     model_name = models.CharField(max_length=60, db_index=True, verbose_name="Модель")
-    model_variant = models.CharField(max_length=100, db_index=True, verbose_name="Модификация")
+    model_variant = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
     age = models.SmallIntegerField(verbose_name="Год выпуска")
 
     def __str__(self):
@@ -20,7 +20,7 @@ class Car(models.Model):
     class Meta:
         verbose_name = 'Автомобиль'
         verbose_name_plural = 'Автомобили'
-        ordering = ['brand']
+        ordering = ['brand', 'model_name']
 
 
 class SparePart(models.Model):

@@ -6,6 +6,7 @@ class AddCarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = '__all__'
+        labels = {'model_variant': 'Поколение модели (например: 2, B6, F15, IV'}
         widgets = {
             'brand': forms.TextInput(attrs={'class': 'form-control'}),
             'model_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -45,5 +46,5 @@ class ProfileEditForm(forms.ModelForm):
         widgets = {
             'user': forms.Select(attrs={'class': 'form-select'}),
             'drive2_link': forms.URLInput(attrs={'class': 'form-control'}),
-            'cars': forms.SelectMultiple(attrs={'class': 'form-select'}),
+            'cars': forms.SelectMultiple(),
         }

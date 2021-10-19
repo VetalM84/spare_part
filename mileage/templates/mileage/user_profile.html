@@ -6,12 +6,13 @@
 
 {% block body %}
 <h1>{{ title }}</h1>
+{% if request.user.is_authenticated %}
     <ol class="list-group">
         <li class="list-group-item">Логин: {{ user.username }}</li>
         <li class="list-group-item">Имя: {{ user.first_name }}</li>
         <li class="list-group-item">Фамилия: {{ user.last_name }}</li>
         <li class="list-group-item">E-mail: {{ user.email }}</li>
-        <li class="list-group-item"><a href="{{ user.profile.drive2_link }}" target="_blank">Ссылка на профиль Drive2.ru</a></li>
+        <li class="list-group-item"><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
     </ol>
     <h3>Мои авто</h3>
     <ol class="list-group list-group-numbered">
@@ -31,5 +32,8 @@
             <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
+{% else %}
+    <p>Зарегистрируйте или войдите</p>
+{% endif %}
 
 {% endblock %}
