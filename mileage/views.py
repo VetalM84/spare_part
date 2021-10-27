@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
 
-from .models import Car, Mileage
+from .models import Car, Mileage, CarModel, CarBrand, SparePart
 from .forms import AddCarForm, AddMileageForm, AddSparePartForm
 
 
@@ -18,15 +18,13 @@ def index(request):
 
 def get_car_spare_parts(request, car_id):
     """ получаем список запчастей для конкретной марки и модели авто """
-    # TODO сделать DISTINCT
-    spare_parts = Mileage.objects.filter(car_id=car_id)
+    spare_parts = Mileage.objects.filter(car_id=car_id).distinct()
     car = get_object_or_404(Car, pk=car_id)
     context = {
         'spare_parts': spare_parts,
         'title': 'Список запчастей для',
         'model_name': car.model_name,
         'brand': car.brand,
-        'car_age': car.age,
     }
     return render(request, 'mileage/car.html', context)
 
@@ -52,9 +50,8 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
         'similar_spare_parts': similar_spare_parts,
         'title': 'Список пробегов запчасти',
         'model_name': car.model_name,
-        'model_variant': car.model_variant,
+        'model_generation': car.generation,
         'brand': car.brand,
-        'car_age': car.age,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
@@ -83,13 +80,21 @@ def add_mileage(request):
         spare_part_form = AddSparePartForm()
         mileage_form = AddMileageForm()
 
-    cars = Car.objects.all()
+    spare_parts = SparePart.objects.distinct()
 
     context = {
         'title': 'Добавить отчет о пробеге',
         'car_form': car_form,
         'spare_part_form': spare_part_form,
         'mileage_form': mileage_form,
-        'cars': cars,
+        'spare_parts': spare_parts,
     }
     return render(request, 'mileage/add_mileage.html', context)
+
+
+def load_models(request):
+    car_brand_id = request.GET.get('car_brand_id')
+    car_models = CarModel.objects.filter(brand_id=car_brand_id)
+    print(f'GET car_brand_id: {car_brand_id}')
+    print(f'car models: {car_models}')
+    return render(request, 'mileage/car_models_dropdown_list.html', {'car_models': car_models})

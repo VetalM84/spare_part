@@ -8,4 +8,5 @@ urlpatterns = [
     path('user/<int:user_id>/', get_user_profile, name='user_profile_page'),
     path('spare-part/<int:car_id>/<int:spare_part_id>/', get_spare_parts_mileages, name='spare_parts_mileages'),
     path('add-mileage/', add_mileage, name='add_mileage_page'),
+    path('mileage/ajax/load-models/', load_models, name='ajax_load-models'),
 ]

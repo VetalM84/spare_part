@@ -13,31 +13,48 @@
     <!-- autocomplete -->
     <script>
   $( function() {
-    var carBrands = [
-        {% for car in cars %}
-            "{{car.brand}}",
+    var sparePartName = [
+        {% for item in spare_parts %}
+            "{{item.name}}",
         {% endfor %}
     ];
-    var carModels = [
-       {% for car in cars %}
-            "{{car.model_name}}",
+    var sparePartBrand = [
+       {% for item in spare_parts %}
+            "{{item.brand}}",
         {% endfor %}
     ];
-    $( "#id_brand" ).autocomplete({
-      source: carBrands,
+    $( "#sp_name" ).autocomplete({
+      source: sparePartName,
       minLength: 3
 
     });
-    $( "#id_model_name" ).autocomplete({
-      source: carModels,
+    $( "#sp_brand" ).autocomplete({
+      source: sparePartBrand,
       minLength: 3
    });
   } );
   </script>
     <!-- autocomplete end-->
+    <!-- chained forms -->
+    <script>
+    $("#id_brand").change(function () {
+      var url = $("#carForm").attr("data-models-url");
+      var modelId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'car_brand_id': modelId
+        },
+        success: function (data) {
+          $("#id_model_name").html(data);
+        }
+      });
+    });
+  </script>
+    <!-- chained forms END -->
 
     {% if request.user.is_authenticated %}
-    <form method="POST">
+    <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
         {% csrf_token %}
         {{ car_form.as_p }}
         {{ spare_part_form.as_p }}

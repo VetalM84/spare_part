@@ -5,14 +5,41 @@ from django.dispatch import receiver
 from django.urls import reverse_lazy
 
 
-class Car(models.Model):
+class CarBrand(models.Model):
     brand = models.CharField(max_length=40, db_index=True, verbose_name="Марка")
-    model_name = models.CharField(max_length=60, db_index=True, verbose_name="Модель")
-    model_variant = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
-    age = models.SmallIntegerField(verbose_name="Год выпуска")
 
     def __str__(self):
-        return ' '.join([self.brand, self.model_name, self.model_variant])
+        return self.brand
+
+    def get_absolute_url(self):
+        return reverse_lazy('car_models', kwargs={'car_brand_id': self.pk})
+
+    class Meta:
+        verbose_name = 'Марка авто'
+        verbose_name_plural = 'Марки авто'
+        ordering = ['brand']
+
+
+class CarModel(models.Model):
+    model_name = models.CharField(max_length=60, db_index=True, verbose_name="Модель")
+    brand_id = models.SmallIntegerField(verbose_name="ID марки")
+
+    def __str__(self):
+        return self.model_name
+
+    class Meta:
+        verbose_name = 'Модель авто'
+        verbose_name_plural = 'Модели авто'
+        ordering = ['brand_id']
+
+
+class Car(models.Model):
+    brand = models.ForeignKey('CarBrand', on_delete=models.PROTECT, verbose_name="Марка")
+    model_name = models.ForeignKey('CarModel', on_delete=models.PROTECT, verbose_name="Модель")
+    generation = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
+
+    def __str__(self):
+        return ' '.join([self.brand, self.model_name, self.generation])
 
     def get_absolute_url(self):
         return reverse_lazy('car_spare_parts', kwargs={'car_id': self.pk})

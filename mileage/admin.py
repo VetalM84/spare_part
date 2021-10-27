@@ -2,7 +2,19 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import SparePart, Car, Mileage, Profile
+from .models import SparePart, Car, Mileage, Profile, CarModel, CarBrand
+
+
+class CarBrandAdmin(admin.ModelAdmin):
+    list_display = ('id', 'brand')
+    list_display_links = ('brand',)
+    search_fields = ('brand',)
+
+
+class CarModelAdmin(admin.ModelAdmin):
+    list_display = ('id', 'model_name', 'brand_id')
+    list_display_links = ('model_name',)
+    search_fields = ('model_name',)
 
 
 class SparePartAdmin(admin.ModelAdmin):
@@ -13,9 +25,9 @@ class SparePartAdmin(admin.ModelAdmin):
 
 
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('id', 'brand', 'model_name', 'model_variant')
+    list_display = ('id', 'brand', 'model_name', 'generation')
     list_display_links = ('id', 'brand', 'model_name')
-    search_fields = ('brand', 'model_name', 'model_variant')
+    search_fields = ('brand', 'model_name', 'generation')
     list_filter = ('brand', 'model_name')
 
 
@@ -48,5 +60,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(SparePart, SparePartAdmin)
 admin.site.register(Car, CarAdmin)
+admin.site.register(CarBrand, CarBrandAdmin)
+admin.site.register(CarModel, CarModelAdmin)
 admin.site.register(Mileage, MileageAdmin)
 admin.site.register(Profile, ProfileAdmin)
