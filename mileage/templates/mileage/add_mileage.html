@@ -35,6 +35,18 @@
   } );
   </script>
     <!-- autocomplete end-->
+
+    {% if request.user.is_authenticated %}
+    <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
+        {% csrf_token %}
+        {{ car_form.as_p }}
+        {{ spare_part_form.as_p }}
+        {{ mileage_form.as_p }}
+        <button class="btn btn-primary" type="submit">Создать</button>
+    </form>
+    {% else %}
+        <p>Зарегистрируйте или войдите</p>
+    {% endif %}
     <!-- chained forms -->
     <script>
     $("#id_brand").change(function () {
@@ -52,17 +64,5 @@
     });
   </script>
     <!-- chained forms END -->
-
-    {% if request.user.is_authenticated %}
-    <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
-        {% csrf_token %}
-        {{ car_form.as_p }}
-        {{ spare_part_form.as_p }}
-        {{ mileage_form.as_p }}
-        <button class="btn btn-primary" type="submit">Создать</button>
-    </form>
-    {% else %}
-        <p>Зарегистрируйте или войдите</p>
-    {% endif %}
 
 {% endblock %}
