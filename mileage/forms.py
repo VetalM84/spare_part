@@ -1,21 +1,21 @@
 from django import forms
-from .models import Profile, Car, SparePart, Mileage, CarModel, CarBrand
+from .models import Profile, SparePart, Mileage, CarModel, CarBrand
 
 
 class AddCarForm(forms.ModelForm):
     class Meta:
-        model = Car
+        model = CarBrand
         fields = '__all__'
-        labels = {'generation': 'Поколение модели (например: 2, B6, F15, IV)'}
+        # labels = {'generation': 'Поколение модели (например: 2, B6, F15, IV)'}
         widgets = {
             'brand': forms.Select(attrs={'class': 'form-select'}),
             'model_name': forms.Select(attrs={'class': 'form-select'}),
-            'generation': forms.TextInput(attrs={'class': 'form-control'}),
+            # 'generation': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['model_name'].queryset = Car.objects.none()
+        self.fields['model_name'].queryset = CarModel.objects.none()
 
         # if 'country' in self.data:
         #     try:

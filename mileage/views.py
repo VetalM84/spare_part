@@ -2,31 +2,53 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
 
-from .models import Car, Mileage, CarModel, CarBrand, SparePart
+from .models import Mileage, CarModel, CarBrand, SparePart
 from .forms import AddCarForm, AddMileageForm, AddSparePartForm
 
 
 def index(request):
-    """ получаем список всех добавленных авто без учета записей о пробеге запчастей """
-    cars = Car.objects.all()
+    """ получаем список всех марок авто """
+    cars = CarBrand.objects.all()
     context = {
         'cars': cars,
-        'title': 'Список автомобилей',
+        'title': 'Список всех марок автомобилей',
     }
     return render(request, template_name='mileage/index.html', context=context)
 
 
-def get_car_spare_parts(request, car_id):
-    """ получаем список запчастей для конкретной марки и модели авто """
-    spare_parts = Mileage.objects.filter(car_id=car_id).distinct()
-    car = get_object_or_404(Car, pk=car_id)
+def get_car_models(request, car_id):
+    """ получаем список моделей авто """
+    car_brand = CarBrand.objects.get(pk=car_id)
+    car_models = CarModel.objects.filter(brand_id=car_id)
     context = {
-        'spare_parts': spare_parts,
-        'title': 'Список запчастей для',
-        'model_name': car.model_name,
-        'brand': car.brand,
+        'car_models': car_models,
+        'title': f'Все модели {car_brand}',
     }
-    return render(request, 'mileage/car.html', context)
+    return render(request, 'mileage/car_models.html', context)
+
+
+def get_model_info(request, model_id):
+    """ получаем информацию о конкретной модели авто """
+    car_brand = CarBrand.objects.get(pk=model_id)
+    car_models = CarModel.objects.filter(brand_id=model_id)
+    context = {
+        'car_models': car_models,
+        'title': f'Все модели {car_brand}',
+    }
+    return render(request, 'mileage/model_info.html', context)
+
+
+# def get_car_spare_parts(request, car_id):
+#     """ получаем список запчастей для конкретной марки и модели авто """
+#     spare_parts = Mileage.objects.filter(car_id=car_id).distinct()
+#     # car = get_object_or_404(Car, pk=car_id)
+#     context = {
+#         'spare_parts': spare_parts,
+#         'title': 'Список запчастей для',
+#         # 'model_name': car.model_name,
+#         # 'brand': car.brand,
+#     }
+#     return render(request, 'mileage/car.html', context)
 
 
 def get_spare_parts_mileages(request, car_id, spare_part_id):
@@ -38,7 +60,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     avg_rating = spare_parts.aggregate(Avg('rating'))
     records_count = spare_parts.count()
 
-    car = get_object_or_404(Car, pk=car_id)
+    # car = get_object_or_404(Car, pk=car_id)
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
@@ -49,9 +71,9 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
         'spare_parts': spare_parts,
         'similar_spare_parts': similar_spare_parts,
         'title': 'Список пробегов запчасти',
-        'model_name': car.model_name,
-        'model_generation': car.generation,
-        'brand': car.brand,
+        # 'model_name': car.model_name,
+        # 'model_generation': car.generation,
+        # 'brand': car.brand,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
@@ -73,20 +95,20 @@ def get_user_profile(request, user_id):
 def add_mileage(request):
     if request.method == 'POST':
         car_form = AddCarForm(request.POST)
-        spare_part_form = AddSparePartForm(request.POST)
-        mileage_form = AddMileageForm(request.POST)
+        # spare_part_form = AddSparePartForm(request.POST)
+        # mileage_form = AddMileageForm(request.POST)
     else:
         car_form = AddCarForm()
-        spare_part_form = AddSparePartForm()
-        mileage_form = AddMileageForm()
+        # spare_part_form = AddSparePartForm()
+        # mileage_form = AddMileageForm()
 
     spare_parts = SparePart.objects.distinct()
 
     context = {
         'title': 'Добавить отчет о пробеге',
         'car_form': car_form,
-        'spare_part_form': spare_part_form,
-        'mileage_form': mileage_form,
+        # 'spare_part_form': spare_part_form,
+        # 'mileage_form': mileage_form,
         'spare_parts': spare_parts,
     }
     return render(request, 'mileage/add_mileage.html', context)

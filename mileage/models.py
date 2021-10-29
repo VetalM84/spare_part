@@ -12,7 +12,7 @@ class CarBrand(models.Model):
         return self.brand
 
     def get_absolute_url(self):
-        return reverse_lazy('car_models', kwargs={'car_brand_id': self.pk})
+        return reverse_lazy('car_models_all', kwargs={'car_id': self.pk})
 
     class Meta:
         verbose_name = 'Марка авто'
@@ -27,33 +27,48 @@ class CarModel(models.Model):
     def __str__(self):
         return self.model_name
 
+    def get_absolute_url(self):
+        return reverse_lazy('model_info', kwargs={'model_id': self.pk})
+
     class Meta:
         verbose_name = 'Модель авто'
         verbose_name_plural = 'Модели авто'
         ordering = ['brand_id']
 
 
-class Car(models.Model):
-    brand = models.ForeignKey('CarBrand', on_delete=models.PROTECT, verbose_name="Марка")
-    model_name = models.ForeignKey('CarModel', on_delete=models.PROTECT, verbose_name="Модель")
-    generation = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
+# class CarGeneration(models.Model):
+#     generation = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
+#     model_id = models.ForeignKey(CarModel, on_delete=models.PROTECT, verbose_name="Модель")
+#
+#     def __str__(self):
+#         return self.generation
+#
+#     def get_absolute_url(self):
+#         return reverse_lazy('car_spare_parts', kwargs={'car_id': self.pk})
+#
+#     class Meta:
+#         verbose_name = 'Поколение модели'
+#         verbose_name_plural = 'Поколения моделей'
+#         ordering = ['model_id']
+
+
+class SparePartCategory(models.Model):
+    name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
 
     def __str__(self):
-        return ' '.join([self.brand, self.model_name, self.generation])
-
-    def get_absolute_url(self):
-        return reverse_lazy('car_spare_parts', kwargs={'car_id': self.pk})
+        return self.name
 
     class Meta:
-        verbose_name = 'Автомобиль'
-        verbose_name_plural = 'Автомобили'
-        ordering = ['brand', 'model_name']
+        verbose_name = 'Категория запчасти'
+        verbose_name_plural = 'Категории запчастей'
+        ordering = ['name']
 
 
 class SparePart(models.Model):
     name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
     brand = models.CharField(max_length=255, db_index=True, verbose_name="Производитель")
     number = models.CharField(max_length=30, db_index=True, unique=True, verbose_name="Номер")
+    category = models.ForeignKey(SparePartCategory, on_delete=models.PROTECT, verbose_name="Категория")
 
     def __str__(self):
         return ' '.join([self.name, self.brand, self.number])
@@ -61,36 +76,34 @@ class SparePart(models.Model):
     class Meta:
         verbose_name = 'Запчасть'
         verbose_name_plural = 'Запчасти'
-        ordering = ['name']
+        ordering = ['category', 'name']
 
 
 class Mileage(models.Model):
     RATING_VALUES = [
-        (1, 'Ужасно'),
-        (2, 'Плохо'),
-        (3, 'Сносно'),
-        (4, 'Хорошо'),
-        (5, 'Отлично'),
+        (1, 'Ужасно'), (2, 'Плохо'), (3, 'Сносно'), (4, 'Хорошо'), (5, 'Отлично'),
     ]
-    spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, verbose_name="Запчасть")
-    car = models.ForeignKey('Car', on_delete=models.PROTECT, verbose_name="Автомобиль")
+    spare_part = models.ForeignKey(SparePart, on_delete=models.PROTECT, verbose_name="Запчасть")
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
-    rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
+    car_brand = models.ForeignKey(CarBrand, on_delete=models.PROTECT, verbose_name="Марка авто")
+    car_model = models.ForeignKey(CarModel, on_delete=models.PROTECT, verbose_name="Модель авто")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
+    rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
+    review = models.TextField(max_length=1000, blank=True)
 
     def __str__(self):
         return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
 
     class Meta:
-        verbose_name = 'Пробег'
-        verbose_name_plural = 'Пробег'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
         ordering = ['spare_part']
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     drive2_link = models.URLField(blank=True, verbose_name="Ссылка на профиль Drive2.ru")
-    cars = models.ManyToManyField(Car, blank=True, verbose_name="Мои автомобили")
+    # cars = models.ManyToManyField(Car, blank=True, verbose_name="Мои автомобили")
 
     def __str__(self):
         return self.user.username
