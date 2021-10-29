@@ -7,8 +7,8 @@
 {% block body %}
 <h1>{{ title }}</h1>
     <ol class="list-group list-group-numbered">
-        {% for car in cars %}
-            <li class="list-group-item"><a href="{{ car.get_absolute_url }}">{{ car.brand }}</a></li>
+        {% for car in car_models %}
+            <li class="list-group-item"><a href="{{ car.get_absolute_url }}">{{ car.model_name }}</a></li>
         {% endfor %}
     </ol>
 {% endblock %}

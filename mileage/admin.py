@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import SparePart, Car, Mileage, Profile, CarModel, CarBrand
+from .models import SparePart, Mileage, Profile, CarModel, CarBrand, SparePartCategory
 
 
 class CarBrandAdmin(admin.ModelAdmin):
@@ -17,32 +17,37 @@ class CarModelAdmin(admin.ModelAdmin):
     search_fields = ('model_name',)
 
 
+class SparePartCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('name',)
+    search_fields = ('name',)
+    list_filter = ('name',)
+
+
 class SparePartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'brand', 'number')
-    list_display_links = ('id', 'name', 'brand', 'number')
+    list_display = ('id', 'name', 'brand', 'number', 'category')
+    list_display_links = ('id', 'name', 'brand')
     search_fields = ('name', 'brand', 'number')
-    list_filter = ('name', 'brand')
+    list_filter = ('name', 'brand', 'category')
 
 
-class CarAdmin(admin.ModelAdmin):
-    list_display = ('id', 'brand', 'model_name', 'generation')
-    list_display_links = ('id', 'brand', 'model_name')
-    search_fields = ('brand', 'model_name', 'generation')
-    list_filter = ('brand', 'model_name')
+# class CarAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'brand', 'model_name', 'generation')
+#     list_display_links = ('id', 'brand', 'model_name')
+#     search_fields = ('brand', 'model_name', 'generation')
+#     list_filter = ('brand', 'model_name')
 
 
 class MileageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'spare_part', 'car', 'mileage', 'owner')
-    list_display_links = ('id', 'spare_part', 'car', 'owner')
-    list_filter = ('spare_part', 'car', 'rating')
-    autocomplete_fields = ('spare_part', 'car', 'owner')
+    list_display = ('id', 'spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'owner')
+    list_display_links = ('id', 'spare_part', 'owner')
+    list_filter = ('spare_part', 'rating')
+    # autocomplete_fields = ('spare_part', 'owner')
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'drive2_link')
     list_display_links = ('id', 'user', 'drive2_link')
-    list_filter = ('cars',)
-    autocomplete_fields = ('user', 'cars')
 
 
 class ProfileInline(admin.StackedInline):
@@ -59,7 +64,8 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(SparePart, SparePartAdmin)
-admin.site.register(Car, CarAdmin)
+admin.site.register(SparePartCategory, SparePartCategoryAdmin)
+# admin.site.register(Car, CarAdmin)
 admin.site.register(CarBrand, CarBrandAdmin)
 admin.site.register(CarModel, CarModelAdmin)
 admin.site.register(Mileage, MileageAdmin)
