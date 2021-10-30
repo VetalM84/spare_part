@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
 
-from .models import Mileage, CarModel, CarBrand, SparePart
-from .forms import AddCarForm, AddMileageForm, AddSparePartForm
+from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory
+from .forms import AddCarForm, AddReviewForm, AddSparePartForm
 
 
 def index(request):
@@ -52,9 +52,19 @@ def get_model_info(request, model_id):
 #     return render(request, 'mileage/car.html', context)
 
 
+def get_spare_parts_category(request, category_id):
+    all_spare_parts = SparePart.objects.filter(category_id=category_id)
+    category_name = SparePartCategory.objects.get(pk=category_id)
+    context = {
+        'title': category_name,
+        'all_spare_parts': all_spare_parts,
+    }
+    return render(request, 'mileage/spare_parts_category.html', context)
+
+
 def get_spare_parts_mileages(request, car_id, spare_part_id):
     """ получаем список всех записей о пробеге для конкретной запчасти на конкретной марке и модели авто """
-    spare_parts = Mileage.objects.filter(car_id=car_id, spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts = Review.objects.filter(car_id=car_id, spare_part_id=spare_part_id).order_by('-mileage')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
@@ -65,8 +75,8 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
-    similar_spare_parts = Mileage.objects.filter(car_id=car_id, spare_part__name__icontains=spare_parts.first().
-                                                 spare_part.name).exclude(spare_part_id=spare_part_id)
+    similar_spare_parts = Review.objects.filter(car_id=car_id, spare_part__name__icontains=spare_parts.first().
+                                                spare_part.name).exclude(spare_part_id=spare_part_id)
 
     context = {
         'spare_parts': spare_parts,
@@ -85,7 +95,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
 
 
 def get_user_profile(request, user_id):
-    user_reports = Mileage.objects.filter(owner_id=user_id)
+    user_reports = Review.objects.filter(owner_id=user_id)
     context = {
         'title': 'Мой профиль',
         'user_reports': user_reports

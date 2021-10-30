@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, SparePart, Mileage, CarModel, CarBrand
+from .models import Profile, SparePart, Review, CarModel, CarBrand
 
 
 class AddCarForm(forms.ModelForm):
@@ -38,9 +38,9 @@ class AddSparePartForm(forms.ModelForm):
         }
 
 
-class AddMileageForm(forms.ModelForm):
+class AddReviewForm(forms.ModelForm):
     class Meta:
-        model = Mileage
+        model = Review
         fields = '__all__'
         widgets = {
             'spare_part': forms.Select(attrs={'class': 'form-select'}),

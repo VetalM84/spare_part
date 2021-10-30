@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ title }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+    <ol class="list-group list-group-numbered">
+        {% for item in all_spare_parts %}
+            <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+        {% empty %}
+            <p>Еще ничего нет</p>
+        {% endfor %}
+    </ol>
+{% endblock %}

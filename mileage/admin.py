@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import SparePart, Mileage, Profile, CarModel, CarBrand, SparePartCategory
+from .models import SparePart, Review, Profile, CarModel, CarBrand, SparePartCategory
 
 
 class CarBrandAdmin(admin.ModelAdmin):
@@ -38,7 +38,7 @@ class SparePartAdmin(admin.ModelAdmin):
 #     list_filter = ('brand', 'model_name')
 
 
-class MileageAdmin(admin.ModelAdmin):
+class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'owner')
     list_display_links = ('id', 'spare_part', 'owner')
     list_filter = ('spare_part', 'rating')
@@ -68,5 +68,5 @@ admin.site.register(SparePartCategory, SparePartCategoryAdmin)
 # admin.site.register(Car, CarAdmin)
 admin.site.register(CarBrand, CarBrandAdmin)
 admin.site.register(CarModel, CarModelAdmin)
-admin.site.register(Mileage, MileageAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(Profile, ProfileAdmin)

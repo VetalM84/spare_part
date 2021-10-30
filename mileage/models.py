@@ -58,6 +58,9 @@ class SparePartCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse_lazy('spare_parts_category', kwargs={'category_id': self.pk})
+
     class Meta:
         verbose_name = 'Категория запчасти'
         verbose_name_plural = 'Категории запчастей'
@@ -79,7 +82,7 @@ class SparePart(models.Model):
         ordering = ['category', 'name']
 
 
-class Mileage(models.Model):
+class Review(models.Model):
     RATING_VALUES = [
         (1, 'Ужасно'), (2, 'Плохо'), (3, 'Сносно'), (4, 'Хорошо'), (5, 'Отлично'),
     ]
@@ -92,7 +95,7 @@ class Mileage(models.Model):
     review = models.TextField(max_length=1000, blank=True)
 
     def __str__(self):
-        return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
+        return ' '.join([self.spare_part, self.rating])
 
     class Meta:
         verbose_name = 'Отзыв'
