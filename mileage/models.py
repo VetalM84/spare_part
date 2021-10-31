@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 
 class CarBrand(models.Model):
-    brand = models.CharField(max_length=40, db_index=True, verbose_name="Марка")
+    brand = models.CharField(max_length=40, choices=(), db_index=True, verbose_name="Марка")
 
     def __str__(self):
         return self.brand

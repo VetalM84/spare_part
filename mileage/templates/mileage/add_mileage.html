@@ -40,6 +40,7 @@
     <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
         {% csrf_token %}
         {{ car_form.as_p }}
+        {{ model_form.as_p }}
         {{ spare_part_form.as_p }}
         {{ mileage_form.as_p }}
         <button class="btn btn-primary" type="submit">Создать</button>

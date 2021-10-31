@@ -1,21 +1,38 @@
 from django import forms
+
 from .models import Profile, SparePart, Review, CarModel, CarBrand
+
+BLANK_CHOICE_DASH = [("", "Сделайте выбор")]
 
 
 class AddCarForm(forms.ModelForm):
+
     class Meta:
         model = CarBrand
-        fields = '__all__'
-        # labels = {'generation': 'Поколение модели (например: 2, B6, F15, IV)'}
+        fields = ['brand']
+        choice_field = forms.ChoiceField(choices=())
         widgets = {
             'brand': forms.Select(attrs={'class': 'form-select'}),
-            'model_name': forms.Select(attrs={'class': 'form-select'}),
-            # 'generation': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['model_name'].queryset = CarModel.objects.none()
+        choices = [(pt.id, pt) for pt in CarBrand.objects.all()]
+        choices = BLANK_CHOICE_DASH + choices
+        self.fields['brand'].choices = choices
+
+
+class AddCarModelForm(forms.ModelForm):
+    class Meta:
+        model = CarModel
+        fields = ['model_name']
+        widgets = {
+            'model_name': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['model_name'].queryset = CarModel.objects.none()
 
         # if 'country' in self.data:
         #     try:

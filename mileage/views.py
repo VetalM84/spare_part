@@ -3,7 +3,7 @@ from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory
-from .forms import AddCarForm, AddReviewForm, AddSparePartForm
+from .forms import AddCarForm, AddReviewForm, AddSparePartForm, AddCarModelForm
 
 
 def index(request):
@@ -62,9 +62,9 @@ def get_spare_parts_category(request, category_id):
     return render(request, 'mileage/spare_parts_category.html', context)
 
 
-def get_spare_parts_mileages(request, car_id, spare_part_id):
+def get_spare_parts_reviews(request, model_id, spare_part_id):
     """ получаем список всех записей о пробеге для конкретной запчасти на конкретной марке и модели авто """
-    spare_parts = Review.objects.filter(car_id=car_id, spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts = Review.objects.filter(car_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
@@ -75,7 +75,7 @@ def get_spare_parts_mileages(request, car_id, spare_part_id):
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
-    similar_spare_parts = Review.objects.filter(car_id=car_id, spare_part__name__icontains=spare_parts.first().
+    similar_spare_parts = Review.objects.filter(car_id=model_id, spare_part__name__icontains=spare_parts.first().
                                                 spare_part.name).exclude(spare_part_id=spare_part_id)
 
     context = {
@@ -106,11 +106,13 @@ def get_user_profile(request, user_id):
 def add_mileage(request):
     if request.method == 'POST':
         car_form = AddCarForm(request.POST)
-        # spare_part_form = AddSparePartForm(request.POST)
+        model_form = AddCarModelForm(request.POST)
+        spare_part_form = AddSparePartForm(request.POST)
         # mileage_form = AddMileageForm(request.POST)
     else:
         car_form = AddCarForm()
-        # spare_part_form = AddSparePartForm()
+        model_form = AddCarModelForm()
+        spare_part_form = AddSparePartForm()
         # mileage_form = AddMileageForm()
 
     spare_parts = SparePart.objects.distinct()
@@ -118,7 +120,8 @@ def add_mileage(request):
     context = {
         'title': 'Добавить отчет о пробеге',
         'car_form': car_form,
-        # 'spare_part_form': spare_part_form,
+        'model_form': model_form,
+        'spare_part_form': spare_part_form,
         # 'mileage_form': mileage_form,
         'spare_parts': spare_parts,
     }
@@ -127,7 +130,7 @@ def add_mileage(request):
 
 def load_models(request):
     car_brand_id = request.GET.get('car_brand_id')
-    car_models = CarModel.objects.filter(brand_id=car_brand_id)
+    car_models = CarModel.objects.filter(brand_id=car_brand_id).order_by('model_name')
     print(f'GET car_brand_id: {car_brand_id}')
     print(f'car models: {car_models}')
     return render(request, 'mileage/car_models_dropdown_list.html', {'car_models': car_models})
