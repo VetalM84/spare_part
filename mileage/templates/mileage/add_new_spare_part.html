@@ -25,12 +25,12 @@
     ];
     $( "#sp_name" ).autocomplete({
       source: sparePartName,
-      minLength: 3
+      minLength: 2
 
     });
     $( "#sp_brand" ).autocomplete({
       source: sparePartBrand,
-      minLength: 3
+      minLength: 2
    });
   } );
   </script>
@@ -39,31 +39,11 @@
     {% if request.user.is_authenticated %}
     <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
         {% csrf_token %}
-        {{ car_form.as_p }}
-        {{ model_form.as_p }}
-        {{ spare_part_form.as_p }}
-        {{ mileage_form.as_p }}
+        {{ form.as_p }}
         <button class="btn btn-primary" type="submit">Создать</button>
     </form>
     {% else %}
         <p>Зарегистрируйте или войдите</p>
     {% endif %}
-    <!-- chained forms -->
-    <script>
-    $("#id_brand").change(function () {
-      var url = $("#carForm").attr("data-models-url");
-      var modelId = $(this).val();
-      $.ajax({
-        url: url,
-        data: {
-          'car_brand_id': modelId
-        },
-        success: function (data) {
-          $("#id_model_name").html(data);
-        }
-      });
-    });
-  </script>
-    <!-- chained forms END -->
 
 {% endblock %}

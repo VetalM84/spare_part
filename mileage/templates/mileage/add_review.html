@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% include 'inc/_autocomplete_links.html' %}
+
+<title>{{ title }}</title>
+
+{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+
+    <!-- autocomplete -->
+    <script>
+  $( function() {
+    var sparePartName = [
+        {% for item in spare_parts %}
+            "{{item.name}}",
+        {% endfor %}
+    ];
+    var sparePartBrand = [
+       {% for item in spare_parts %}
+            "{{item.brand}}",
+        {% endfor %}
+    ];
+    $( "#sp_name" ).autocomplete({
+      source: sparePartName,
+      minLength: 2
+
+    });
+    $( "#sp_brand" ).autocomplete({
+      source: sparePartBrand,
+      minLength: 2
+   });
+  } );
+  </script>
+    <!-- autocomplete end-->
+
+    {% if request.user.is_authenticated %}
+    <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
+        {% csrf_token %}
+        {{ car_form.as_p }}
+        {{ model_form.as_p }}
+        <p>В каталоге нет нужной запчасти? <a href="{% url "new_spare_part" %}">Добавить новую</a></p>
+        {{ spare_part_form.as_p }}
+        {{ review_form.as_p }}
+        <button class="btn btn-primary" type="submit">Создать</button>
+    </form>
+    {% else %}
+        <p>Зарегистрируйте или войдите</p>
+    {% endif %}
+    <!-- chained forms -->
+    <script>
+    $("#id_brand").change(function () {
+      var url = $("#carForm").attr("data-models-url");
+      var modelId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'car_brand_id': modelId
+        },
+        success: function (data) {
+          $("#id_model_name").html(data);
+        }
+      });
+    });
+  </script>
+    <!-- chained forms END -->
+
+{% endblock %}

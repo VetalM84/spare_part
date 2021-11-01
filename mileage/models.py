@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 
 class CarBrand(models.Model):
-    brand = models.CharField(max_length=40, choices=(), db_index=True, verbose_name="Марка")
+    brand = models.CharField(max_length=40, choices=(), db_index=True, unique=True, verbose_name="Марка")
 
     def __str__(self):
         return self.brand
@@ -36,22 +36,6 @@ class CarModel(models.Model):
         ordering = ['brand_id']
 
 
-# class CarGeneration(models.Model):
-#     generation = models.CharField(max_length=100, db_index=True, verbose_name="Поколение")
-#     model_id = models.ForeignKey(CarModel, on_delete=models.PROTECT, verbose_name="Модель")
-#
-#     def __str__(self):
-#         return self.generation
-#
-#     def get_absolute_url(self):
-#         return reverse_lazy('car_spare_parts', kwargs={'car_id': self.pk})
-#
-#     class Meta:
-#         verbose_name = 'Поколение модели'
-#         verbose_name_plural = 'Поколения моделей'
-#         ordering = ['model_id']
-
-
 class SparePartCategory(models.Model):
     name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
 
@@ -70,7 +54,7 @@ class SparePartCategory(models.Model):
 class SparePart(models.Model):
     name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
     brand = models.CharField(max_length=255, db_index=True, verbose_name="Производитель")
-    number = models.CharField(max_length=30, db_index=True, unique=True, verbose_name="Номер")
+    number = models.CharField(max_length=30, db_index=True, verbose_name="Номер (артикул)")
     category = models.ForeignKey(SparePartCategory, on_delete=models.PROTECT, verbose_name="Категория")
 
     def __str__(self):
@@ -84,7 +68,7 @@ class SparePart(models.Model):
 
 class Review(models.Model):
     RATING_VALUES = [
-        (1, 'Ужасно'), (2, 'Плохо'), (3, 'Сносно'), (4, 'Хорошо'), (5, 'Отлично'),
+        ('1', 'Ужасно'), ('2', 'Плохо'), ('3', 'Сносно'), ('4', 'Хорошо'), ('5', 'Отлично'),
     ]
     spare_part = models.ForeignKey(SparePart, on_delete=models.PROTECT, verbose_name="Запчасть")
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
@@ -92,7 +76,7 @@ class Review(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.PROTECT, verbose_name="Модель авто")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
     rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
-    review = models.TextField(max_length=1000, blank=True)
+    review = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
 
     def __str__(self):
         return ' '.join([self.spare_part, self.rating])
@@ -106,7 +90,6 @@ class Review(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     drive2_link = models.URLField(blank=True, verbose_name="Ссылка на профиль Drive2.ru")
-    # cars = models.ManyToManyField(Car, blank=True, verbose_name="Мои автомобили")
 
     def __str__(self):
         return self.user.username
