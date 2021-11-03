@@ -10,39 +10,10 @@
 {% block body %}
     <h1>{{ title }}</h1>
 
-    <!-- autocomplete -->
-    <script>
-  $( function() {
-    var sparePartName = [
-        {% for item in spare_parts %}
-            "{{item.name}}",
-        {% endfor %}
-    ];
-    var sparePartBrand = [
-       {% for item in spare_parts %}
-            "{{item.brand}}",
-        {% endfor %}
-    ];
-    $( "#sp_name" ).autocomplete({
-      source: sparePartName,
-      minLength: 2
-
-    });
-    $( "#sp_brand" ).autocomplete({
-      source: sparePartBrand,
-      minLength: 2
-   });
-  } );
-  </script>
-    <!-- autocomplete end-->
-
     {% if request.user.is_authenticated %}
-    <form method="POST" id="carForm" data-models-url="{% url 'ajax_load-models' %}" novalidate>
+    <form method="POST">
         {% csrf_token %}
-        {{ car_form.as_p }}
-        {{ model_form.as_p }}
         <p>В каталоге нет нужной запчасти? <a href="{% url "new_spare_part" %}">Добавить новую</a></p>
-        {{ spare_part_form.as_p }}
         {{ review_form.as_p }}
         <button class="btn btn-primary" type="submit">Создать</button>
     </form>
@@ -51,20 +22,30 @@
     {% endif %}
     <!-- chained forms -->
     <script>
-    $("#id_brand").change(function () {
-      var url = $("#carForm").attr("data-models-url");
-      var modelId = $(this).val();
-      $.ajax({
-        url: url,
-        data: {
-          'car_brand_id': modelId
-        },
-        success: function (data) {
-          $("#id_model_name").html(data);
-        }
-      });
-    });
-  </script>
+    $(document).ready(function(){
+    $('select[name=car_model]').children().remove();
+    $('select[name=car_model]').append('<option id="">Сначала выберите марку</option>');
+    $('select[name=car_brand]').change(function(){
+        brand_id = $(this).val();
+        request_url = '/get_models/' + brand_id + '/';
+        $.ajax({
+            url: request_url,
+            success: function(data){
+                $('#id_car_model').empty(); // очищаем список
+                $('select[name=car_model]').append(
+                    $('<option></option>').val('').html('Выберите модель') // добавляем плейсхолдер
+                );
+                $.each(data, function(index, text){
+                    $('select[name=car_model]').append( // добавляем модели циклом
+                         $('<option></option>').val(index).html(text)
+                     );
+                });
+            }
+        });
+        return false;
+    })
+});
+    </script>
     <!-- chained forms END -->
 
 {% endblock %}

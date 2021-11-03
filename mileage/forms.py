@@ -2,8 +2,6 @@ from django import forms
 
 from .models import Profile, SparePart, Review, CarModel, CarBrand
 
-BLANK_CHOICE_DASH = [("", "Сделайте выбор")]
-
 
 class AddCarBrandForm(forms.ModelForm):
     class Meta:
@@ -14,12 +12,6 @@ class AddCarBrandForm(forms.ModelForm):
             'brand': forms.Select(attrs={'class': 'form-select'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        choices = [(pt.id, pt) for pt in CarBrand.objects.all()]
-        choices = BLANK_CHOICE_DASH + choices
-        self.fields['brand'].choices = choices
-
 
 class AddCarModelForm(forms.ModelForm):
     class Meta:
@@ -28,24 +20,6 @@ class AddCarModelForm(forms.ModelForm):
         widgets = {
             'model_name': forms.Select(attrs={'class': 'form-select'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['model_name'].queryset = CarModel.objects.none()
-
-        if 'car_brand_id' in self.data:
-            print('yes-------------------------------------------------')
-            try:
-                brand_id = int(self.data.get('car_brand_id'))
-                # self.fields['model_name'].queryset = CarModel.objects.filter(brand_id=brand_id).order_by('model_name')
-                self.fields['model_name'].queryset = CarModel.objects.filter(brand_id=self.data['car_brand_id'])
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            print('no---------------------------------------------------')
-            self.fields['model_name'].queryset = self.instance.brand.model_name_set
-        else:
-            print('else--------------------------------------------------')
 
 
 class AddSparePartForm(forms.ModelForm):
@@ -62,22 +36,26 @@ class AddSparePartForm(forms.ModelForm):
 
 
 class AddReviewForm(forms.ModelForm):
+    car_brand = forms.ModelChoiceField(queryset=CarBrand.objects.all(), label='Марка', empty_label='Выберите марку',
+                                       widget=forms.Select(attrs={'class': 'form-select'}))
+    car_model = forms.ModelChoiceField(queryset=CarModel.objects.all(), label='Модель',
+                                       empty_label='Сначала выберите марку',
+                                       widget=forms.Select(attrs={'class': 'form-select'}))
+
     class Meta:
         model = Review
         fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'review', 'owner']
         widgets = {
             'spare_part': forms.Select(attrs={'class': 'form-select'}),
             'mileage': forms.NumberInput(attrs={'class': 'form-control'}),
-            'car_brand': forms.Select(attrs={'class': 'form-select', 'id': 'id_brand'}),
-            'car_model': forms.Select(attrs={'class': 'form-select', 'id': 'id_model_name'}),
             'rating': forms.Select(attrs={'class': 'form-select'}),
             'review': forms.Textarea(attrs={'class': 'form-control', 'rows': '5'}),
             'owner': forms.Select(attrs={'class': 'form-select'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['car_model'].queryset = CarModel.objects.none()
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['car_model'].queryset = CarModel.objects.none()
 
 
 class ProfileEditForm(forms.ModelForm):

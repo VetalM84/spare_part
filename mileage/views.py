@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+
+import simplejson
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory
 from .forms import AddCarBrandForm, AddCarModelForm, AddReviewForm, AddSparePartForm
@@ -65,8 +68,18 @@ def get_spare_parts_category(request, category_id):
 def add_new_spare_part(request):
     if request.method == 'POST':
         form = AddSparePartForm(request.POST)
+        s_p_name = request.POST.get('name')
+        s_p_brand = request.POST.get('brand')
+        s_p_number = request.POST.get('number')
         if form.is_valid():
-            form.save()
+            # если такая запчасть существует, то не плодим дубли
+            try:
+                SparePart.objects.get(name__iexact=s_p_name, brand__iexact=s_p_brand, number__iexact=s_p_number)
+                # TODO сделать всплывающее сообщение о том, что запчасть существует
+                print('Уже есть в БД')
+            except SparePart.DoesNotExist:
+                form.save()
+                return redirect('add_review_page')
     else:
         form = AddSparePartForm()
 
@@ -74,7 +87,7 @@ def add_new_spare_part(request):
     spare_parts = SparePart.objects.all().distinct()
 
     context = {
-        'title': 'Добавить отзыв о запчасти',
+        'title': 'Добавить новую запчасть в каталог',
         'form': form,
         'spare_parts': spare_parts,
     }
@@ -121,6 +134,15 @@ def get_user_profile(request, user_id):
     return render(request, 'mileage/user_profile.html', context)
 
 
+def get_chained_car_models(request, brand_id):
+    car_brand = CarBrand.objects.get(pk=brand_id)
+    car_models = CarModel.objects.filter(brand_id=car_brand.id)
+    models_dict = {}
+    for item in car_models:
+        models_dict[item.id] = item.model_name
+    return HttpResponse(simplejson.dumps(models_dict), content_type="application/json")
+
+
 def add_review(request):
     if request.method == 'POST':
         # car_form = AddCarBrandForm(request.POST)
@@ -129,6 +151,7 @@ def add_review(request):
         review_form = AddReviewForm(request.POST)
         if review_form.is_valid():
             review_form.save()
+            return redirect('home')
     else:
         # car_form = AddCarBrandForm()
         # model_form = AddCarModelForm()
@@ -147,11 +170,3 @@ def add_review(request):
         'spare_parts': spare_parts,
     }
     return render(request, 'mileage/add_review.html', context)
-
-
-def load_models(request):
-    car_brand_id = request.GET.get('car_brand_id')
-    car_models = CarModel.objects.filter(brand_id=car_brand_id).order_by('model_name')
-    # print(f'GET car_brand_id: {car_brand_id}')
-    # print(f'car models: {car_models}')
-    return render(request, 'mileage/car_models_dropdown_list.html', {'car_models': car_models})
