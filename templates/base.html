@@ -16,10 +16,13 @@
 
   </head>
   <body>
+
     {% include 'inc/_navbar.html' %}
 
     <div class="container">
+        {% include 'inc/_alert_messages.html' %}
         {% block body %}
+
 
         {% endblock %}
     </div>

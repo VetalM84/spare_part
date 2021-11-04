@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Avg, Max, Min
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.contrib import messages
 
 import simplejson
 
@@ -75,10 +76,10 @@ def add_new_spare_part(request):
             # если такая запчасть существует, то не плодим дубли
             try:
                 SparePart.objects.get(name__iexact=s_p_name, brand__iexact=s_p_brand, number__iexact=s_p_number)
-                # TODO сделать всплывающее сообщение о том, что запчасть существует
-                print('Уже есть в БД')
+                messages.error(request, 'Такая запчасть уже существует')
             except SparePart.DoesNotExist:
                 form.save()
+                messages.success(request, 'Запчасть успешно добавлена в каталог')
                 return redirect('add_review_page')
     else:
         form = AddSparePartForm()
