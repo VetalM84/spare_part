@@ -14,19 +14,11 @@
         <li class="list-group-item">E-mail: {{ user.email }}</li>
         <li class="list-group-item"><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
     </ol>
-    <h3>Мои авто</h3>
-    <ol class="list-group list-group-numbered">
-        {% for item in user.profile.cars.all %}
-            <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
-        {% empty %}
-            <li class="list-group-item">У вас еще нет машин</li>
-        {% endfor %}
-    </ol>
 
-    <h3>Мои отчеты о запчастях</h3>
+    <h3>Мои озывы о запчастях</h3>
     <ol class="list-group list-group-numbered">
-        {% for item in user_reports %}
-            <li class="list-group-item"><a href="{% url 'spare_parts_mileages' item.car_id item.spare_part_id %}">
+        {% for item in user_reviews %}
+            <li class="list-group-item"><a href="{% url 'spare_parts_reviews' item.car_model_id item.spare_part_id %}">
                 {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
         {% empty %}
             <p>Еще ничего нет</p>

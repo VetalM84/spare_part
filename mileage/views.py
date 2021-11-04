@@ -127,10 +127,10 @@ def get_spare_parts_reviews(request, model_id, spare_part_id):
 
 
 def get_user_profile(request, user_id):
-    user_reports = Review.objects.filter(owner_id=user_id)
+    user_reviews = Review.objects.filter(owner_id=user_id).order_by('spare_part', 'spare_part__category_id')
     context = {
         'title': 'Мой профиль',
-        'user_reports': user_reports
+        'user_reviews': user_reviews
     }
     return render(request, 'mileage/user_profile.html', context)
 

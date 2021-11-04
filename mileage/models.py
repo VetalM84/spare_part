@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 
 class CarBrand(models.Model):
-    brand = models.CharField(max_length=40, choices=(), db_index=True, unique=True, verbose_name="Марка")
+    brand = models.CharField(max_length=40, choices=(), unique=True, verbose_name="Марка")
 
     def __str__(self):
         return self.brand
@@ -79,7 +79,10 @@ class Review(models.Model):
     review = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
 
     def __str__(self):
-        return ' '.join([self.spare_part, self.rating])
+        return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number, 'оценка:', self.rating])
+
+    # def get_absolute_url(self):
+    #     return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
 
     class Meta:
         verbose_name = 'Отзыв'
