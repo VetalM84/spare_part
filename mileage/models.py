@@ -79,7 +79,7 @@ class Review(models.Model):
     review = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
 
     def __str__(self):
-        return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number, 'оценка:', self.rating])
+        return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
 
     # def get_absolute_url(self):
     #     return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
