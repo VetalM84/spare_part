@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ title }} "{{ query }}"</title>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ title }} "{{ query }}"</h1>
+    <ol class="list-group list-group-numbered">
+    {% for item in search_result %}
+        <li class="list-group-item"><a href="#">{{ item }}</a></li>
+    </ol>
+    {% empty %}
+        <p>Ничего не найдено</p>
+    {% endfor %}
+{% endblock %}

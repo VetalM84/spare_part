@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Q
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -171,3 +171,19 @@ def add_review(request):
         'spare_parts': spare_parts,
     }
     return render(request, 'mileage/add_review.html', context)
+
+
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query:
+            search_result = SparePart.objects.filter(Q(name__icontains=query) | Q(number__icontains=query))
+        else:
+            query = ''
+            search_result = []
+    context = {
+        'title': 'Результаты поиска по запросу',
+        'query': query,
+        'search_result': search_result,
+    }
+    return render(request, 'mileage/search.html', context)

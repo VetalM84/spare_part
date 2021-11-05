@@ -134,13 +134,13 @@
     </div>
     <div class="px-3 py-2 border-bottom mb-3">
       <div class="container d-flex flex-wrap justify-content-center">
-        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" method="GET" action="{% url 'search_page' %}">
+          <input type="search" name="q" id="q" class="form-control" placeholder="Поиск запчасти" aria-label="Поиск запчасти">
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-light text-dark me-2">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
+          <button type="button" class="btn btn-light text-dark me-2">Войти</button>
+          <button type="button" class="btn btn-primary">Регистрация</button>
         </div>
       </div>
     </div>

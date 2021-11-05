@@ -10,7 +10,8 @@ urlpatterns = [
     path('new_spare_part/', add_new_spare_part, name='new_spare_part'),
     path('add_review/', add_review, name='add_review_page'),
     path('get_models/<int:brand_id>/', get_chained_car_models, name='ajax_get_chained_car_models'),
-    # path('car/<int:car_id>/', get_car_spare_parts, name='car_spare_parts'),
+    path('search/', search, name='search_page'),
     path('user/<int:user_id>/', get_user_profile, name='user_profile_page'),
+    # path('car/<int:car_id>/', get_car_spare_parts, name='car_spare_parts'),
     path('spare-part/<int:model_id>/<int:spare_part_id>/', get_spare_parts_reviews, name='spare_parts_reviews'),
 ]
