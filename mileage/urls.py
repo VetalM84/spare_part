@@ -12,6 +12,7 @@ urlpatterns = [
     path('get_models/<int:brand_id>/', get_chained_car_models, name='ajax_get_chained_car_models'),
     path('search/', search, name='search_page'),
     path('user/<int:user_id>/', get_user_profile, name='user_profile_page'),
+    path('spare_part/<int:spare_part_id>/', get_spare_part, name='get_spare_part'),
     # path('car/<int:car_id>/', get_car_spare_parts, name='car_spare_parts'),
     path('spare-part/<int:model_id>/<int:spare_part_id>/', get_spare_parts_reviews, name='spare_parts_reviews'),
 ]

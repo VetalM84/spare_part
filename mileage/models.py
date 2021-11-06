@@ -61,7 +61,7 @@ class SparePart(models.Model):
         return ' '.join([self.name, self.brand, self.number])
 
     def get_absolute_url(self):
-        return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
+        return reverse_lazy('get_spare_part', kwargs={'spare_part_id': self.pk})
 
     class Meta:
         verbose_name = 'Запчасть'

@@ -5,14 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<h1>Список пробегов запчасти {{ brand }} {{ model_name }}</h1>
-    <ol class="list-group list-group-numbered">
-        {% for item in spare_parts %}
-            <li class="list-group-item">{{ item }} - {{ item.mileage }} тыс.км.</li>
-        {% empty %}
-            <p>Еще ничего нет</p>
-        {% endfor %}
-    </ol>
+<h1>{{ spare_part }}</h1>
 <div class="row">
   <div class="col-sm-3" style="margin-top: 20px">
     <div class="card">
@@ -57,23 +50,39 @@
   <div class="col-sm-2" style="margin-top: 20px">
     <div class="card">
       <div class="card-header">
-        Всего записей
+        Всего отзывов
       </div>
       <div class="card-body">
         <h5 class="card-title">{{ records_count }} шт.</h5>
       </div>
     </div>
     </div>
+    <h2>Отзывы об этой запчасти</h2>
+  <div class="row row-cols-1 row-cols-md-4 g-2">
+    {% for item in spare_parts_mileages %}
+   <div class="col">
+    <div class="card" style="height: 14rem;">
+      <div class="card-body text-dark">
+        <h5 class="card-title">Оценил на: {{ item.rating }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Пробег {{ item.mileage }} тыс.км.</h6>
+        <p class="card-text" style="min-height: 6em;">{% if item.review %}{{ item.review|truncatechars:120 }}{% else %}Пусто{% endif %}</p>
+        <a href="{{ item.car_model.get_absolute_url }}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
+        <a href="{{ item.owner.profile.get_absolute_url }}" class="card-link">{{ item.owner.username }}</a>
+      </div>
     </div>
-
-    <h2>Похожие запчасти</h2>
+    </div>
+     {% empty %}
+        <p>Еще никто не оствил отзыв</p>
+    {% endfor %}
+  </div>
+    </div>
+     <h2>Автомобили, где установлена эта запчасть</h2>
     <ol class="list-group list-group-numbered">
-        {% for item in similar_spare_parts|slice:':7' %}
-            <li class="list-group-item"><a href="{% url 'spare_parts_mileages' item.car_id item.spare_part_id %}">
-                {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
+        {% for item in cars %}
+            <li class="list-group-item"><a href="{{ item.car_model.get_absolute_url }}">
+                {{ item.car_brand }} {{ item.car_model }}</a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
-
 {% endblock %}
