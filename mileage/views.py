@@ -11,7 +11,7 @@ from .forms import AddCarBrandForm, AddCarModelForm, AddReviewForm, AddSparePart
 
 
 def index(request):
-    """ получаем список всех марок авто """
+    """ получаем список всех марок авто на домашней странице"""
     cars = CarBrand.objects.all()
     context = {
         'cars': cars,
@@ -25,14 +25,9 @@ def get_car_models(request, car_id):
     car_brand = CarBrand.objects.get(pk=car_id)
     # получаем и выводим кол-во отзывов к маркам авто
     car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
-    # reviews = car_models.annotate(cnt=Count('review')).filter(cnt__gt=0)
-    # print(reviews)
-    # for item in reviews:
-    #     print(item.model_name, item.cnt)
 
     context = {
         'car_models': car_models,
-        # 'reviews': reviews,
         'title': f'Все модели {car_brand}',
     }
     return render(request, 'mileage/car_models.html', context)
@@ -53,6 +48,7 @@ def get_model_info(request, model_id):
 
 
 def get_spare_parts_category(request, category_id):
+    """ выводим список запчастей в определенной категории """
     all_spare_parts = SparePart.objects.filter(category_id=category_id)
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
@@ -60,6 +56,16 @@ def get_spare_parts_category(request, category_id):
         'all_spare_parts': all_spare_parts,
     }
     return render(request, 'mileage/spare_parts_category.html', context)
+
+
+def get_all_spare_parts_categories(request):
+    """ выводим список всех категорий автозапчастей """
+    categories = SparePartCategory.objects.all().order_by('pk').annotate(cnt=Count('sparepart'))
+    context = {
+        'title': 'Все категории запчастей',
+        'categories': categories,
+    }
+    return render(request, 'mileage/all_spare_parts_categories.html', context)
 
 
 def add_new_spare_part(request):
@@ -92,9 +98,9 @@ def add_new_spare_part(request):
     return render(request, 'mileage/add_new_spare_part.html', context)
 
 
-def get_spare_parts_reviews(request, model_id, spare_part_id):
+def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     """ получаем список всех записей о пробеге для конкретной запчасти на конкретной марке и модели авто """
-    spare_parts = Review.objects.filter(car_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts = Review.objects.filter(car_model_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
@@ -120,7 +126,7 @@ def get_spare_parts_reviews(request, model_id, spare_part_id):
         'avg_rating': avg_rating['rating__avg'],
         'records_count': records_count,
     }
-    return render(request, 'mileage/spare_part.html', context)
+    return render(request, 'mileage/spare_part_by_car.html', context)
 
 
 def get_user_profile(request, user_id):
@@ -143,7 +149,7 @@ def get_chained_car_models(request, brand_id):
 
 
 def add_review(request):
-    # добавляем отзыв
+    """ добавляем отзыв """
     if request.method == 'POST':
         # car_form = AddCarBrandForm(request.POST)
         # model_form = AddCarModelForm(request.POST)
@@ -217,15 +223,3 @@ def get_spare_part(request, spare_part_id):
         'cars': cars,
     }
     return render(request, 'mileage/spare_part.html', context)
-
-# def get_car_spare_parts(request, car_id):
-#     """ получаем список запчастей для конкретной марки и модели авто """
-#     spare_parts = Mileage.objects.filter(car_id=car_id).distinct()
-#     # car = get_object_or_404(Car, pk=car_id)
-#     context = {
-#         'spare_parts': spare_parts,
-#         'title': 'Список запчастей для',
-#         # 'model_name': car.model_name,
-#         # 'brand': car.brand,
-#     }
-#     return render(request, 'mileage/car.html', context)

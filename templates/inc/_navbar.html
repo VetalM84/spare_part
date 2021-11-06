@@ -103,6 +103,12 @@
               </a>
             </li>
             <li>
+              <a href="{% url 'get_spare_parts_categories' %}" class="nav-link {% if request.resolver_match.view_name == 'get_spare_parts_categories' %}text-secondary{% else %}text-white{% endif %}">
+                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
+                Все запчасти
+              </a>
+            </li>
+            <li>
               <a href="{% url "add_review_page" %}" class="nav-link {% if request.resolver_match.view_name == 'add_review_page' %}text-secondary{% else %}text-white{% endif %}">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
                 Добавить отчет
@@ -113,12 +119,6 @@
               <a href="#" class="nav-link text-white">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
                 Orders
-              </a>
-            </li>
-            <li>
-              <a href="#" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
-                Products
               </a>
             </li>
               {% endcomment %}
