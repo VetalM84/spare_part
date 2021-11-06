@@ -24,6 +24,7 @@ def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
     car_models = CarModel.objects.filter(brand_id=car_id)
+    # TODO добавить кол-во отзывов/запчастей к маркам авто
     context = {
         'car_models': car_models,
         'title': f'Все модели {car_brand}',

@@ -9,6 +9,8 @@
     <ol class="list-group list-group-numbered">
         {% for item in spare_parts %}
             <li class="list-group-item"><a href="{{ item.spare_part.get_absolute_url }}">{{ item.spare_part }}</a></li>
+        {% empty %}
+            <p>Еще ничего нет</p>
         {% endfor %}
     </ol>
 {% endblock %}
