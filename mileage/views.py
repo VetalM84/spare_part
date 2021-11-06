@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.db.models import Avg, Max, Min, Q
+from django.db.models import Avg, Max, Min, Q, Count
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -23,10 +23,16 @@ def index(request):
 def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
-    car_models = CarModel.objects.filter(brand_id=car_id)
-    # TODO добавить кол-во отзывов/запчастей к маркам авто
+    # получаем и выводим кол-во отзывов к маркам авто
+    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
+    # reviews = car_models.annotate(cnt=Count('review')).filter(cnt__gt=0)
+    # print(reviews)
+    # for item in reviews:
+    #     print(item.model_name, item.cnt)
+
     context = {
         'car_models': car_models,
+        # 'reviews': reviews,
         'title': f'Все модели {car_brand}',
     }
     return render(request, 'mileage/car_models.html', context)
@@ -36,7 +42,6 @@ def get_model_info(request, model_id):
     """ получаем информацию о конкретной модели авто """
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
-    # TODO добавить информацию о запчастях
     spare_parts = Review.objects.filter(car_model_id=model_id)
     context = {
         'spare_parts': spare_parts,
