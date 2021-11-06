@@ -35,7 +35,10 @@ def get_model_info(request, model_id):
     """ получаем информацию о конкретной модели авто """
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
+    # TODO добавить информацию о запчастях
+    spare_parts = Review.objects.filter(car_model_id=model_id)
     context = {
+        'spare_parts': spare_parts,
         'car_model': car_model,
         'car_brand': car_brand,
         'title': f'Все для {car_brand.brand} {car_model.model_name}',
@@ -191,8 +194,13 @@ def get_spare_part(request, spare_part_id):
     records_count = spare_parts_mileages.count()
 
     cars = spare_part.review_set.all()
+    # reviews = spare_part.review_set.all()
+    # unique_brands = CarBrand.objects.filter(review__in=reviews).distinct()
+    # unique = CarModel.objects.filter(review__in=reviews).distinct()
 
     context = {
+        # 'unique_brands': unique_brands,
+        # 'unique': unique,
         'spare_part': spare_part,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
