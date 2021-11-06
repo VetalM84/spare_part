@@ -100,6 +100,11 @@ def add_new_spare_part(request):
 
 def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     """ получаем список всех записей о пробеге для конкретной запчасти на конкретной марке и модели авто """
+    spare_part = SparePart.objects.get(pk=spare_part_id)
+    car_model = CarModel.objects.get(pk=model_id)
+    car_brand = CarBrand.objects.get(review__car_model_id=model_id)
+
+    # TODO проверить spare_parts = Review.objects.filter через Review.objects.get
     spare_parts = Review.objects.filter(car_model_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
@@ -111,13 +116,16 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
-    similar_spare_parts = Review.objects.filter(car_id=model_id, spare_part__name__icontains=spare_parts.first().
-                                                spare_part.name).exclude(spare_part_id=spare_part_id)
+    # similar_spare_parts = Review.objects.filter(car_id=model_id, spare_part__name__icontains=spare_parts.first().
+    #                                             spare_part.name).exclude(spare_part_id=spare_part_id)
 
     context = {
+        'car_brand': car_brand,
+        'car_model': car_model,
+        'spare_part': spare_part,
         'spare_parts': spare_parts,
-        'similar_spare_parts': similar_spare_parts,
-        'title': 'Список пробегов запчасти',
+        # 'similar_spare_parts': similar_spare_parts,
+        'title': 'Список отзывов запчасти',
         # 'model_name': car.model_name,
         # 'brand': car.brand,
         'min_mileage': min_mileage['mileage__min'],
