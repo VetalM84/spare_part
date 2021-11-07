@@ -49,7 +49,7 @@ def get_model_info(request, model_id):
 
 def get_spare_parts_category(request, category_id):
     """ выводим список запчастей в определенной категории """
-    all_spare_parts = SparePart.objects.filter(category_id=category_id)
+    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('review'))
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
         'title': category_name,
@@ -104,7 +104,6 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(review__car_model_id=model_id)
 
-    # TODO проверить spare_parts = Review.objects.filter через Review.objects.get
     spare_parts = Review.objects.filter(car_model_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
@@ -112,7 +111,6 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     avg_rating = spare_parts.aggregate(Avg('rating'))
     records_count = spare_parts.count()
 
-    # car = get_object_or_404(Car, pk=car_id)
     # список похожих запчастей по имени запчасти исключая текущую
     # current_spare_part_name = SparePart.objects.get(id=spare_part_id).name
     # similar_spare_parts = SparePart.objects.filter(name__contains=current_spare_part_name)
@@ -126,8 +124,6 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
         'spare_parts': spare_parts,
         # 'similar_spare_parts': similar_spare_parts,
         'title': 'Список отзывов запчасти',
-        # 'model_name': car.model_name,
-        # 'brand': car.brand,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],

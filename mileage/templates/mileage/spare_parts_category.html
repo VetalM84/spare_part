@@ -8,7 +8,9 @@
 <h1>{{ title }}</h1>
     <ol class="list-group list-group-numbered">
         {% for item in all_spare_parts %}
-            <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+            <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}
+            {% if item.cnt > 0 %}<span class="badge bg-primary rounded-pill"> {{ item.cnt }}
+                    {% else %}{% endif %}</span></a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}
