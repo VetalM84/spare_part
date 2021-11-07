@@ -9,7 +9,7 @@
     <ul class="nav col-md-4 justify-content-end">
       <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2 text-muted">Главная</a></li>
       <li class="nav-item"><a href="{% url "add_review_page" %}" class="nav-link px-2 text-muted">Добавить отчет</a></li>
-      <li class="nav-item"><a href="{% url "user_profile_page" user.id %}" class="nav-link px-2 text-muted">Мой профиль</a></li>
+      <li class="nav-item"><a href="{% if user.id %}{% url "user_profile_page" user.id %}{% else %}#need-login{% endif %}" class="nav-link px-2 text-muted">Мой профиль</a></li>
       <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
     </ul>
   </footer>
