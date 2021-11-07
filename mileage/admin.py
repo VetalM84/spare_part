@@ -21,33 +21,25 @@ class SparePartCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('name',)
     search_fields = ('name',)
-    list_filter = ('name',)
 
 
 class SparePartAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'brand', 'number', 'category')
-    list_display_links = ('id', 'name', 'brand')
+    list_display_links = ('name', 'brand')
     search_fields = ('name', 'brand', 'number')
-    list_filter = ('name', 'brand', 'category')
-
-
-# class CarAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'brand', 'model_name', 'generation')
-#     list_display_links = ('id', 'brand', 'model_name')
-#     search_fields = ('brand', 'model_name', 'generation')
-#     list_filter = ('brand', 'model_name')
+    list_filter = ('category',)
 
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'owner')
-    list_display_links = ('id', 'spare_part', 'owner')
-    list_filter = ('spare_part', 'rating')
+    list_display_links = ('spare_part',)
+    list_filter = ('rating',)
     # autocomplete_fields = ('spare_part', 'owner')
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'drive2_link')
-    list_display_links = ('id', 'user', 'drive2_link')
+    list_display_links = ('user', 'drive2_link')
 
 
 class ProfileInline(admin.StackedInline):
@@ -65,7 +57,6 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(SparePart, SparePartAdmin)
 admin.site.register(SparePartCategory, SparePartCategoryAdmin)
-# admin.site.register(Car, CarAdmin)
 admin.site.register(CarBrand, CarBrandAdmin)
 admin.site.register(CarModel, CarModelAdmin)
 admin.site.register(Review, ReviewAdmin)
