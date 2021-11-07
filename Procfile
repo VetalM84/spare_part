@@ -1,1 +1,1 @@
-web: gunicorn mileage.wsgi
+web: gunicorn spare_part.wsgi  --log-file -
