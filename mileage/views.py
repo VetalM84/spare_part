@@ -27,6 +27,7 @@ def get_car_models(request, car_id):
     car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
 
     context = {
+        'car_brand': car_brand,
         'car_models': car_models,
         'title': f'Все модели {car_brand}',
     }

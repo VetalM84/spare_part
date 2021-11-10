@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 class CarBrand(models.Model):
     brand = models.CharField(max_length=40, choices=(), unique=True, verbose_name="Марка")
+    logo = models.ImageField(upload_to='media/logo/', blank=True, verbose_name="Эмблема'")
 
     def __str__(self):
         return self.brand

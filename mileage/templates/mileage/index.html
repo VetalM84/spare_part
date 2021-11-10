@@ -8,7 +8,8 @@
 <h1>{{ title }}</h1>
     <ul class="list-inline">
         {% for car in cars %}
-            <li class="list-inline-item"><a href="{{ car.get_absolute_url }}">{{ car.brand }}</a></li>
+            <li class="list-inline-item"><a href="{{ car.get_absolute_url }}">
+                {% if car.logo %}<img src="{{ car.logo.url }}" alt="" height="60">{% endif %}{{ car.brand }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
