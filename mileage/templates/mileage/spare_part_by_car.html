@@ -40,7 +40,7 @@
         Средний пробег
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{ avg_mileage }} тыс.км.</h5>
+        <h5 class="card-title">{{ avg_mileage|floatformat:1 }} тыс.км.</h5>
       </div>
     </div>
     </div>
@@ -50,7 +50,7 @@
         Рейтинг запчасти
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{ avg_rating }}</h5>
+        <h5 class="card-title">{{ avg_rating|floatformat:1 }}</h5>
       </div>
     </div>
     </div>
