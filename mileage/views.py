@@ -89,12 +89,13 @@ def add_new_spare_part(request):
         form = AddSparePartForm()
 
     # для автокомплита
-    spare_parts = SparePart.objects.all().distinct()
-
+    spare_parts_names = SparePart.objects.order_by('name').distinct('name')
+    spare_parts_brands = SparePart.objects.order_by('brand').distinct('brand')
     context = {
         'title': 'Добавить новую запчасть в каталог',
         'form': form,
-        'spare_parts': spare_parts,
+        'spare_parts_names': spare_parts_names,
+        'spare_parts_brands': spare_parts_brands,
     }
     return render(request, 'mileage/add_new_spare_part.html', context)
 
@@ -112,6 +113,7 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     avg_rating = spare_parts.aggregate(Avg('rating'))
     records_count = spare_parts.count()
 
+    # TODO проверить работу этой выдачи
     # список похожих запчастей по имени запчасти исключая текущую
     # similar_spare_parts = SparePart.objects.filter(name__contains=spare_part.name)[:7]
     similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_parts.first().

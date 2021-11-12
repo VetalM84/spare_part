@@ -14,15 +14,16 @@
     <script>
   $( function() {
     var sparePartName = [
-        {% for item in spare_parts %}
+        {% for item in spare_parts_names %}
             "{{item.name}}",
         {% endfor %}
     ];
     var sparePartBrand = [
-       {% for item in spare_parts %}
-            "{{item.brand}}",
+       {% for item in spare_parts_brands %}
+            "{{item.name}}",
         {% endfor %}
     ];
+
     $( "#sp_name" ).autocomplete({
       source: sparePartName,
       minLength: 2
