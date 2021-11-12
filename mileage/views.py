@@ -38,7 +38,9 @@ def get_model_info(request, model_id):
     """ получаем информацию о конкретной модели авто """
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
-    spare_parts = Review.objects.filter(car_model_id=model_id)
+    # отображаем только уникальные запчасти
+    spare_parts = Review.objects.filter(car_model_id=model_id).order_by('spare_part__name').\
+        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number')
     context = {
         'spare_parts': spare_parts,
         'car_model': car_model,
@@ -89,6 +91,7 @@ def add_new_spare_part(request):
         form = AddSparePartForm()
 
     # для автокомплита
+    # TODO попытаться оптимизировать запросы
     spare_parts_names = SparePart.objects.order_by('name').distinct('name')
     spare_parts_brands = SparePart.objects.order_by('brand').distinct('brand')
     context = {
@@ -114,11 +117,12 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     records_count = spare_parts.count()
 
     # TODO проверить работу этой выдачи
-    # список похожих запчастей по имени запчасти исключая текущую
+    # TODO добавить вывод запчастей похожих с учетом марки авто
+    # список похожих запчастей по имени запчасти без учета модели авто
     # similar_spare_parts = SparePart.objects.filter(name__contains=spare_part.name)[:7]
-    similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_parts.first().
-                                                spare_part.name).exclude(spare_part_id=spare_part_id)
-
+    similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_part.name)
+    # similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_parts.first().
+    #                                             spare_part.name).exclude(spare_part_id=spare_part_id)
     context = {
         'car_brand': car_brand,
         'car_model': car_model,
@@ -136,6 +140,7 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
 
 
 def get_user_profile(request, user_id):
+    """ отображаем публичный профиль пользователя """
     user_reviews = Review.objects.filter(owner_id=user_id).order_by('spare_part', 'spare_part__category_id')
     context = {
         'title': 'Мой профиль',
@@ -185,6 +190,7 @@ def add_review(request):
 
 
 def search(request):
+    """ поиск по названию или номеру запчасти """
     if request.method == 'GET':
         query = request.GET.get('q')
         if query:
@@ -201,24 +207,26 @@ def search(request):
 
 
 def get_spare_part(request, spare_part_id):
+    """ вся информация о запчасти """
     spare_part = get_object_or_404(SparePart, pk=spare_part_id)
 
+    # список пробегов запчасти
     spare_parts_mileages = Review.objects.filter(spare_part_id=spare_part_id).order_by('-mileage')
+    # или такой запрос
     # spare_parts_mileages = spare_part.review_set.all().order_by('-mileage')
+
     max_mileage = spare_parts_mileages.aggregate(Max('mileage'))
     min_mileage = spare_parts_mileages.aggregate(Min('mileage'))
     avg_mileage = spare_parts_mileages.aggregate(Avg('mileage'))
     avg_rating = spare_parts_mileages.aggregate(Avg('rating'))
     records_count = spare_parts_mileages.count()
 
-    cars = spare_part.review_set.all()
-    # reviews = spare_part.review_set.all()
+    # список авто, где стоит эта запчасть
+    cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
+        distinct('car_brand__brand', 'car_model__model_name')
     # unique_brands = CarBrand.objects.filter(review__in=reviews).distinct()
-    # unique = CarModel.objects.filter(review__in=reviews).distinct()
 
     context = {
-        # 'unique_brands': unique_brands,
-        # 'unique': unique,
         'spare_part': spare_part,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],

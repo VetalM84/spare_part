@@ -56,7 +56,7 @@ class SparePart(models.Model):
     name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
     brand = models.CharField(max_length=255, db_index=True, verbose_name="Производитель")
     number = models.CharField(max_length=30, db_index=True, verbose_name="Номер (артикул)")
-    category = models.ForeignKey(SparePartCategory, on_delete=models.PROTECT, verbose_name="Категория")
+    category = models.ForeignKey('SparePartCategory', on_delete=models.PROTECT, verbose_name="Категория")
 
     def __str__(self):
         return ' '.join([self.name, self.brand, self.number])
@@ -74,10 +74,10 @@ class Review(models.Model):
     RATING_VALUES = [
         ('1', 'Ужасно'), ('2', 'Плохо'), ('3', 'Сносно'), ('4', 'Хорошо'), ('5', 'Отлично'),
     ]
-    spare_part = models.ForeignKey(SparePart, on_delete=models.PROTECT, verbose_name="Запчасть")
+    spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, verbose_name="Запчасть")
     mileage = models.SmallIntegerField(verbose_name="Пробег, тыс.км")
-    car_brand = models.ForeignKey(CarBrand, on_delete=models.PROTECT, verbose_name="Марка авто")
-    car_model = models.ForeignKey(CarModel, on_delete=models.PROTECT, verbose_name="Модель авто")
+    car_brand = models.ForeignKey('CarBrand', on_delete=models.PROTECT, verbose_name="Марка авто")
+    car_model = models.ForeignKey('CarModel', on_delete=models.PROTECT, verbose_name="Модель авто")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
     rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
     review = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
