@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='mileage',
-            name='review',
+            name='testimonial',
             field=models.TextField(blank=True, max_length=1000),
         ),
         migrations.AlterField(

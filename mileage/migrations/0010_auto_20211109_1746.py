@@ -21,8 +21,8 @@ class Migration(migrations.Migration):
             field=models.CharField(choices=[], max_length=40, unique=True, verbose_name='Марка'),
         ),
         migrations.AlterField(
-            model_name='review',
-            name='review',
+            model_name='testimonial',
+            name='testimonial',
             field=models.TextField(blank=True, max_length=1000, verbose_name='Отзыв'),
         ),
     ]

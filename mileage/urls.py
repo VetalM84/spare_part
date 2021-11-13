@@ -14,6 +14,6 @@ urlpatterns = [
     path('search/', search, name='search_page'),
     path('user/<int:user_id>/', get_user_profile, name='user_profile_page'),
     path('spare_part/<int:spare_part_id>/', get_spare_part, name='get_spare_part'),
-    path('spare-part/<int:model_id>/<int:spare_part_id>/', get_model_spare_parts_reviews,
+    path('model_spare_part/<int:model_id>/<int:spare_part_id>/', get_model_spare_parts_reviews,
          name='model_spare_parts_reviews'),
 ]

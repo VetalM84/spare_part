@@ -24,7 +24,7 @@ def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
     # получаем и выводим кол-во отзывов к маркам авто
-    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
+    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('testimonial'))
 
     context = {
         'car_brand': car_brand,
@@ -52,7 +52,7 @@ def get_model_info(request, model_id):
 
 def get_spare_parts_category(request, category_id):
     """ выводим список запчастей в определенной категории """
-    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('review'))
+    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('testimonial'))
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
         'title': category_name,
@@ -116,11 +116,12 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     avg_rating = spare_parts.aggregate(Avg('rating'))
     records_count = spare_parts.count()
 
-    # TODO проверить работу этой выдачи
-    # TODO добавить вывод запчастей похожих с учетом марки авто
-    # список похожих запчастей по имени запчасти без учета модели авто
-    # similar_spare_parts = SparePart.objects.filter(name__contains=spare_part.name)[:7]
-    similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_part.name)
+    # TODO искючить из выдачи текущую запчасть
+    # список похожих запчастей по имени запчасти c учетом модели авто
+    similar_spare_parts = Review.objects.filter(
+        spare_part__name__icontains=spare_part.name, spare_part__category_id=spare_part.category.id,
+        car_model__id=model_id).order_by('spare_part__name', 'spare_part__brand', 'spare_part__number').\
+        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number')
     # similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_parts.first().
     #                                             spare_part.name).exclude(spare_part_id=spare_part_id)
     context = {
@@ -224,6 +225,8 @@ def get_spare_part(request, spare_part_id):
     # список авто, где стоит эта запчасть
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
         distinct('car_brand__brand', 'car_model__model_name')
+    # unique_brands = CarBrand.objects.filter(review__in=cars).distinct()
+    # reviews = spare_part.review_set.all()
     # unique_brands = CarBrand.objects.filter(review__in=reviews).distinct()
 
     context = {

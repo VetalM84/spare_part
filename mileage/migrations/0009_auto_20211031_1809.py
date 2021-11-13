@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             field=models.CharField(choices=[], db_index=True, max_length=40, unique=True, verbose_name='Марка'),
         ),
         migrations.AlterField(
-            model_name='review',
+            model_name='testimonial',
             name='rating',
             field=models.CharField(choices=[('1', 'Ужасно'), ('2', 'Плохо'), ('3', 'Сносно'), ('4', 'Хорошо'), ('5', 'Отлично')], default=3, max_length=1, verbose_name='Рейтинг'),
         ),

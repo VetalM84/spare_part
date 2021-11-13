@@ -44,12 +44,12 @@ class AddReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'review', 'owner']
+        fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'testimonial', 'owner']
         widgets = {
             'spare_part': forms.Select(attrs={'class': 'form-select'}),
             'mileage': forms.NumberInput(attrs={'class': 'form-control'}),
             'rating': forms.Select(attrs={'class': 'form-select'}),
-            'review': forms.Textarea(attrs={'class': 'form-control', 'rows': '5'}),
+            'testimonial': forms.Textarea(attrs={'class': 'form-control', 'rows': '5'}),
             'owner': forms.Select(attrs={'class': 'form-select'}),
         }
 

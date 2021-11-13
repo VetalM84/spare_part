@@ -65,7 +65,7 @@
       <div class="card-body text-dark">
         <h5 class="card-title">Оценил на: {{ item.rating }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">Пробег {{ item.mileage }} тыс.км.</h6>
-        <p class="card-text" style="min-height: 6em;">{% if item.review %}{{ item.review|truncatechars:120 }}{% else %}Пусто{% endif %}</p>
+        <p class="card-text" style="min-height: 6em;">{% if item.testimonial %}{{ item.testimonial|truncatechars:120 }}{% else %}Пусто{% endif %}</p>
         <a href="{% url 'model_spare_parts_reviews' item.car_model.id item.spare_part_id %}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
       {% comment %}
         <a href="{{ item.car_model.get_absolute_url }}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
