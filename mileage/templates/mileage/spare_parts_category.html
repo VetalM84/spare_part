@@ -19,8 +19,8 @@
     <ol class="list-group list-group-numbered">
         {% for item in all_spare_parts %}
             <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}
-            {% if item.cnt > 0 %}<span class="badge bg-primary rounded-pill"> {{ item.cnt }}
-                    {% else %}{% endif %}</span></a></li>
+            {% if item.cnt > 0 %}<span class="badge bg-primary rounded-pill"> {{ item.cnt }}</span>
+                    {% else %}{% endif %}</a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}

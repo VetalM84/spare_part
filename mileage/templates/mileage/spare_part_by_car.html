@@ -79,8 +79,7 @@
     <h2>Похожие запчасти</h2>
     <ol class="list-group list-group-numbered">
         {% for item in similar_spare_parts %}
-            <li class="list-group-item"><a href="{% url 'model_spare_parts_reviews' item.car_model_id item.spare_part_id %}">
-                {{ item }}</a></li>
+            <li class="list-group-item"><a href="{% url 'model_spare_parts_reviews' item.car_model_id item.spare_part_id %}">{{ item }}</a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}
