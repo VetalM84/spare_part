@@ -24,7 +24,7 @@ def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
     # получаем и выводим кол-во отзывов к маркам авто
-    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('testimonial'))
+    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
 
     context = {
         'car_brand': car_brand,
@@ -52,7 +52,7 @@ def get_model_info(request, model_id):
 
 def get_spare_parts_category(request, category_id):
     """ выводим список запчастей в определенной категории """
-    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('testimonial'))
+    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('review'))
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
         'title': category_name,
