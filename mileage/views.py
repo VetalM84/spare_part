@@ -195,7 +195,8 @@ def search(request):
     if request.method == 'GET':
         query = request.GET.get('q')
         if query:
-            search_result = SparePart.objects.filter(Q(name__icontains=query) | Q(number__icontains=query))
+            search_result = SparePart.objects.filter(Q(name__icontains=query) | Q(number__icontains=query)).\
+                annotate(cnt=Count('review'))
         else:
             query = ''
             search_result = []

@@ -17,7 +17,10 @@
     <h1>{{ title }} "{{ query }}"</h1>
     <ol class="list-group list-group-numbered">
     {% for item in search_result %}
-        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}</a></li>
+        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}
+            {% if item.cnt > 0 %}<span class="badge bg-primary rounded-pill"> {{ item.cnt }}</span>
+            {% else %}{% endif %}</a></li>
+
     {% empty %}
         <p>Ничего не найдено</p>
     {% endfor %}
