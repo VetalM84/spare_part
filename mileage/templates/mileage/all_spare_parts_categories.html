@@ -4,6 +4,15 @@
 <title>{{ title }}</title>
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Каталог запчастей</li>
+      </ol>
+    </nav>
+{% endblock %}
+
 {% block body %}
 <h1>{{ title }}</h1>
     <ol class="list-group list-group-numbered">

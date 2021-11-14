@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{{ title }}</title>
+<title>{{ title }} {{ car_brand }}</title>
+{% endblock %}
+
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ car_brand }}</li>
+      </ol>
+    </nav>
 {% endblock %}
 
 {% block body %}

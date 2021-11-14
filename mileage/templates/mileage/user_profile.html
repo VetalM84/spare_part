@@ -4,6 +4,15 @@
 <title>{{ title }}</title>
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Мой профиль</li>
+      </ol>
+    </nav>
+{% endblock %}
+
 {% block body %}
 <h1>{{ title }}</h1>
 {% if request.user.is_authenticated %}
@@ -15,10 +24,14 @@
         <li class="list-group-item"><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
     </ol>
 
-    <h3>Мои озывы о запчастях</h3>
+    <h3>Мои отзывы о запчастях</h3>
     <ol class="list-group list-group-numbered">
         {% for item in user_reviews %}
+            {% comment %}
+            # TODO починить ссылку
             <li class="list-group-item"><a href="{% url 'spare_parts_reviews' item.car_model_id item.spare_part_id %}">
+            {% endcomment %}
+            <li class="list-group-item"><a href="#">
                 {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
         {% empty %}
             <p>Еще ничего нет</p>

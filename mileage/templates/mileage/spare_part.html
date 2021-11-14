@@ -4,6 +4,17 @@
 <title>{{ title }}</title>
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+          <li class="breadcrumb-item" aria-current="page"><a href="{% url 'get_spare_parts_categories' %}">Каталог запчастей</a></li>
+          <li class="breadcrumb-item" aria-current="page"><a href="{% url 'spare_parts_category' spare_part.category_id %}">{{ spare_part.category.name }}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ spare_part }}</li>
+      </ol>
+    </nav>
+{% endblock %}
+
 {% block body %}
 <h1>{{ spare_part }}</h1>
 <div class="row">

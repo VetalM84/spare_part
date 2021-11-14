@@ -24,12 +24,12 @@ def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
     # получаем и выводим кол-во отзывов к маркам авто
-    car_models = CarModel.objects.filter(brand_id=car_id).annotate(cnt=Count('review'))
+    car_models = CarModel.objects.filter(brand_id=car_id).order_by('model_name').annotate(cnt=Count('review'))
 
     context = {
         'car_brand': car_brand,
         'car_models': car_models,
-        'title': f'Все модели {car_brand}',
+        'title': 'Все модели',
     }
     return render(request, 'mileage/car_models.html', context)
 
@@ -55,7 +55,7 @@ def get_spare_parts_category(request, category_id):
     all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('review'))
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
-        'title': category_name,
+        'category_name': category_name,
         'all_spare_parts': all_spare_parts,
     }
     return render(request, 'mileage/spare_parts_category.html', context)

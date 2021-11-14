@@ -17,6 +17,11 @@
     {% include 'inc/_navbar.html' %}
 
     <div class="container">
+      {% block breadcrumb %}
+      {% endblock breadcrumb %}
+    </div>
+
+    <div class="container">
         {% include 'inc/_alert_messages.html' %}
         {% block body %}
 

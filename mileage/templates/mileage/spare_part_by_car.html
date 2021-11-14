@@ -4,6 +4,17 @@
 <title>{{ title }}</title>
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'car_models_all' car_brand.id %}">{{ car_brand }}</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'model_info' car_model.id %}">{{ car_model }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ spare_part }}</li>
+      </ol>
+    </nav>
+{% endblock %}
+
 {% block body %}
 <h1>Список пробегов запчасти {{ spare_part }} для {{ car_brand }} {{ car_model }}</h1>
     <ol class="list-group list-group-numbered">
@@ -69,7 +80,7 @@
     <ol class="list-group list-group-numbered">
         {% for item in similar_spare_parts %}
             <li class="list-group-item"><a href="{% url 'model_spare_parts_reviews' item.car_model_id item.spare_part_id %}">
-                {{ item }}</a> - {{ item.mileage }} тыс.км.</li>
+                {{ item }}</a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}
