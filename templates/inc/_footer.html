@@ -1,16 +1,14 @@
-<div class="container">
-  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <p class="col-md-4 mb-0 text-muted">&copy; 2021 Отзывы о запчастях</p>
+<div class="uk-container uk-container-center uk-text-center">
 
-    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-    </a>
+                <ul class="uk-subnav uk-subnav-line uk-flex-center">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url "add_review_page" %}">Добавить отзыв</a></li>
+                    <li><a href="{% if user.id %}{% url "user_profile_page" user.id %}{% else %}#need-login{% endif %}">Мой профиль</a></li>
+                </ul>
 
-    <ul class="nav col-md-4 justify-content-end">
-      <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2 text-muted">Главная</a></li>
-      <li class="nav-item"><a href="{% url "add_review_page" %}" class="nav-link px-2 text-muted">Добавить отзыв</a></li>
-      <li class="nav-item"><a href="{% if user.id %}{% url "user_profile_page" user.id %}{% else %}#need-login{% endif %}" class="nav-link px-2 text-muted">Мой профиль</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-    </ul>
-  </footer>
+                <div class="uk-panel">
+                    <p>Made by <a href="http://www.yootheme.com">YOOtheme</a> with love and caffeine.<br class="uk-hidden-small">Licensed under <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>
+                    <a href="index.html"><img src="docs/images/logo_uikit.svg" width="90" height="30" title="UIkit" alt="UIkit"></a>
+                </div>
+
 </div>

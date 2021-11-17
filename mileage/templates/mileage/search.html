@@ -5,24 +5,26 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Поиск</li>
-      </ol>
-    </nav>
+<div class="uk-container uk-padding-small">
+      <ul class="uk-breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><span>Поиск</span></li>
+      </ul>
+</div>
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }} "{{ query }}"</h1>
-    <ol class="list-group list-group-numbered">
+<div class="uk-container">
+<h1 class="uk-h2">{{ title }} "{{ query }}"</h1>
+    <ul class="uk-list uk-list-decimal">
     {% for item in search_result %}
-        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item }}
-            {% if item.cnt > 0 %}<span class="badge bg-primary rounded-pill"> {{ item.cnt }}</span>
-            {% else %}{% endif %}</a></li>
+        <li><a href="{{ item.get_absolute_url }}">{{ item }}
+            {% if item.cnt > 0 %}<span class="uk-badge"> {{ item.cnt }}</span>{% else %}{% endif %}
+        </a></li>
 
     {% empty %}
         <p>Ничего не найдено</p>
     {% endfor %}
-    </ol>
+    </ul>
+</div>
 {% endblock %}

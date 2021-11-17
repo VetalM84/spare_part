@@ -5,25 +5,27 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
-        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'car_models_all' car_brand.id %}">{{ car_brand }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ car_model }}</li>
-      </ol>
-    </nav>
+<div class="uk-container uk-padding-small">
+      <ul class="uk-breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><a href="{% url 'car_models_all' car_brand.id %}">{{ car_brand }}</a></li>
+        <li><span>{{ car_model }}</span></li>
+      </ul>
+</div>
 {% endblock %}
 
 {% block body %}
-<h1>{{ title }}</h1>
-    <ol class="list-group list-group-numbered">
+<div class="uk-container">
+<h1 class="uk-h2">{{ title }}</h1>
+    <ul class="uk-list uk-list-decimal">
         {% for item in spare_parts %}
             {% comment %}
-            <li class="list-group-item"><a href="{{ item.spare_part.get_absolute_url }}">{{ item.spare_part }}</a></li>
+            <li><a href="{{ item.spare_part.get_absolute_url }}">{{ item.spare_part }}</a></li>
             {% endcomment %}
-            <li class="list-group-item"><a href="{% url 'model_spare_parts_reviews' item.car_model_id item.spare_part_id %}">{{ item.spare_part }}</a></li>
+            <li><a href="{% url 'model_spare_parts_reviews' item.car_model_id item.spare_part_id %}">{{ item.spare_part }}</a></li>
         {% empty %}
             <p>Еще ничего нет</p>
         {% endfor %}
-    </ol>
+    </ul>
+</div>
 {% endblock %}

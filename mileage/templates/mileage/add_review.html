@@ -8,23 +8,24 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Добавить отзыв</li>
-      </ol>
-    </nav>
+<div class="uk-container uk-padding-small">
+      <ul class="uk-breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><span>Добавить отзыв</span></li>
+      </ul>
+</div>
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
+<div class="uk-container">
+<h1 class="uk-h2">{{ title }}</h1>
 
     {% if request.user.is_authenticated %}
     <form method="POST">
         {% csrf_token %}
         <p>В каталоге нет нужной запчасти? <a href="{% url "new_spare_part" %}">Добавить новую</a></p>
         {{ review_form.as_p }}
-        <button class="btn btn-primary" type="submit">Создать</button>
+        <button class="uk-button uk-button-primary" type="submit">Создать</button>
     </form>
     {% else %}
         <p>Зарегистрируйтесь или войдите</p>
@@ -56,5 +57,5 @@
 });
     </script>
     <!-- chained forms END -->
-
+</div>
 {% endblock %}

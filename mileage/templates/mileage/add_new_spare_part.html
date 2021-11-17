@@ -8,16 +8,17 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Добавить запчасть</li>
-      </ol>
-    </nav>
+<div class="uk-container uk-padding-small">
+      <ul class="uk-breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><span>Добавить запчасть</span></li>
+      </ul>
+</div>
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
+<div class="uk-container">
+<h1 class="uk-h2">{{ title }}</h1>
 
     <!-- autocomplete -->
     <script>
@@ -29,7 +30,7 @@
     ];
     var sparePartBrand = [
        {% for item in spare_parts_brands %}
-            "{{item.name}}",
+            "{{item.brand}}",
         {% endfor %}
     ];
 
@@ -50,10 +51,10 @@
     <form method="POST" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-primary" type="submit">Создать</button>
+        <button class="uk-button uk-button-primary" type="submit">Создать</button>
     </form>
     {% else %}
         <p>Зарегистрируйтесь или войдите</p>
     {% endif %}
-
+</div>
 {% endblock %}
