@@ -1,3 +1,4 @@
+from django.db.models.functions import Length
 from django.shortcuts import render, redirect
 from django.db.models import Avg, Max, Min, Q, Count
 from django.shortcuts import get_object_or_404
@@ -214,7 +215,7 @@ def get_spare_part(request, spare_part_id):
     spare_part = get_object_or_404(SparePart, pk=spare_part_id)
 
     # список пробегов запчасти
-    spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by(Length('testimonial').desc())
     # или такой запрос
     # spare_parts_mileages = spare_part.review_set.all().order_by('-mileage')
 
