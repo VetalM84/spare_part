@@ -52,7 +52,8 @@ def get_model_info(request, model_id):
 
 def get_spare_parts_category(request, category_id):
     """ выводим список запчастей в определенной категории """
-    all_spare_parts = SparePart.objects.filter(category_id=category_id).annotate(cnt=Count('review'))
+    all_spare_parts = SparePart.objects.filter(category_id=category_id).order_by('name', 'brand').\
+        annotate(cnt=Count('review'))
     category_name = SparePartCategory.objects.get(pk=category_id)
     context = {
         'category_name': category_name,
