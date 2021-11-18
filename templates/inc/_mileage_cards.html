@@ -1,0 +1,52 @@
+<div class="uk-grid uk-grid-match uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@s uk-child-width-1-5@m uk-text-center card-border"
+     uk-grid>
+    <div>
+        <div class="uk-card uk-card-default uk-card-small">
+            <div class="uk-card-header">
+                <h3 class="uk-h5">Минимальный пробег</h3>
+            </div>
+            <div class="uk-card-body">{{ min_mileage }} тыс.км.</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="uk-card uk-card-default uk-card-small">
+            <div class="uk-card-header">
+                <h3 class="uk-h5">Максимальный пробег</h3>
+            </div>
+            <div class="uk-card-body">{{ max_mileage }} тыс.км.</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="uk-card uk-card-default uk-card-small">
+            <div class="uk-card-header">
+                <h3 class="uk-h5">Средний пробег</h3>
+            </div>
+            <div class="uk-card-body">{{ avg_mileage|floatformat:1 }} тыс.км.</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="uk-card uk-card-default uk-card-small">
+            <div class="uk-card-header">
+                <h3 class="uk-h5">Рейтинг запчасти</h3>
+            </div>
+            <div class="uk-card-body">{{ avg_rating|floatformat:1 }}</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="uk-card uk-card-default uk-card-small">
+            <div class="uk-card-header">
+                <h3 class="uk-h5">Всего отзывов</h3>
+            </div>
+            <div class="uk-card-body">{{ records_count }} шт.</div>
+        </div>
+    </div>
+</div>
+    <style>
+        .card-border > div > div.uk-card {
+            border: 1px solid #e5e5e5;
+        }
+    </style>

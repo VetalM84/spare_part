@@ -131,7 +131,7 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
         'spare_part': spare_part,
         'spare_parts': spare_parts,
         'similar_spare_parts': similar_spare_parts,
-        'title': 'Список отзывов запчасти',
+        'title': 'Отзывы для запчасти',
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
@@ -214,15 +214,15 @@ def get_spare_part(request, spare_part_id):
     spare_part = get_object_or_404(SparePart, pk=spare_part_id)
 
     # список пробегов запчасти
-    spare_parts_mileages = Review.objects.filter(spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by('-mileage')
     # или такой запрос
     # spare_parts_mileages = spare_part.review_set.all().order_by('-mileage')
 
-    max_mileage = spare_parts_mileages.aggregate(Max('mileage'))
-    min_mileage = spare_parts_mileages.aggregate(Min('mileage'))
-    avg_mileage = spare_parts_mileages.aggregate(Avg('mileage'))
-    avg_rating = spare_parts_mileages.aggregate(Avg('rating'))
-    records_count = spare_parts_mileages.count()
+    max_mileage = spare_parts_reviews.aggregate(Max('mileage'))
+    min_mileage = spare_parts_reviews.aggregate(Min('mileage'))
+    avg_mileage = spare_parts_reviews.aggregate(Avg('mileage'))
+    avg_rating = spare_parts_reviews.aggregate(Avg('rating'))
+    records_count = spare_parts_reviews.count()
 
     # список авто, где стоит эта запчасть
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
@@ -238,7 +238,7 @@ def get_spare_part(request, spare_part_id):
         'avg_mileage': avg_mileage['mileage__avg'],
         'avg_rating': avg_rating['rating__avg'],
         'records_count': records_count,
-        'spare_parts_mileages': spare_parts_mileages,
+        'spare_parts_reviews': spare_parts_reviews,
         'cars': cars,
     }
     return render(request, 'mileage/spare_part.html', context)

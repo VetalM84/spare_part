@@ -1,106 +1,77 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{{ title }}</title>
+    <title>{{ title }}</title>
 {% endblock %}
 
 {% block breadcrumb %}
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
-          <li class="breadcrumb-item" aria-current="page"><a href="{% url 'get_spare_parts_categories' %}">Каталог запчастей</a></li>
-          <li class="breadcrumb-item" aria-current="page"><a href="{% url 'spare_parts_category' spare_part.category_id %}">{{ spare_part.category.name }}</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{ spare_part }}</li>
-      </ol>
-    </nav>
+    <div class="uk-container uk-padding-small">
+        <ul class="uk-breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li><a href="{% url 'get_spare_parts_categories' %}">Каталог запчастей</a></li>
+            <li><a href="{% url 'spare_parts_category' spare_part.category_id %}">{{ spare_part.category.name }}</a>
+            </li>
+            <li><span>{{ spare_part }}</span></li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block body %}
-<h1>{{ spare_part }}</h1>
-    {% if records_count %}
-        <div class="row">
-      <div class="col-sm-3" style="margin-top: 20px">
-        <div class="card">
-          <div class="card-header">
-            Минимальный пробег
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ min_mileage }} тыс.км.</h5>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-3" style="margin-top: 20px">
-        <div class="card">
-          <div class="card-header">
-            Максимальный пробег
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ max_mileage }} тыс.км.</h5>
-          </div>
-        </div>
-        </div>
-      <div class="col-sm-2" style="margin-top: 20px">
-        <div class="card">
-          <div class="card-header">
-            Средний пробег
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ avg_mileage|floatformat:1 }} тыс.км.</h5>
-          </div>
-        </div>
-        </div>
-      <div class="col-sm-2" style="margin-top: 20px">
-        <div class="card">
-          <div class="card-header">
-            Рейтинг запчасти
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ avg_rating|floatformat:1 }}</h5>
-          </div>
-        </div>
-        </div>
-      <div class="col-sm-2" style="margin-top: 20px">
-        <div class="card">
-          <div class="card-header">
-            Всего отзывов
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ records_count }} шт.</h5>
-          </div>
-        </div>
-        </div>
-        <h2>Отзывы об этой запчасти</h2>
-      <div class="row row-cols-1 row-cols-md-4 g-2">
-        {% for item in spare_parts_mileages %}
-       <div class="col">
-        <div class="card" style="height: 14rem;">
-          <div class="card-body text-dark">
-            <h5 class="card-title">Оценил на: {{ item.rating }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Пробег {{ item.mileage }} тыс.км.</h6>
-            <p class="card-text" style="min-height: 6em;">{% if item.testimonial %}{{ item.testimonial|truncatechars:120 }}{% else %}Пусто{% endif %}</p>
-            <a href="{% url 'model_spare_parts_reviews' item.car_model.id item.spare_part_id %}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
-          {% comment %}
+    <div class="uk-container">
+        <h1 class="uk-h2">{{ spare_part }}</h1>
+
+        {% if records_count %}
+            {% include 'inc/_mileage_cards.html' %}
+
+            <h2 class="uk-h3">Отзывы об этой запчасти</h2>
+            <div class="uk-grid uk-width-auto uk-child-width-1-2@m uk-child-width-1-3@l uk-grid-match uk-grid-small card-border"uk-grid>
+                {% for item in spare_parts_reviews %}
+                    <div>
+                        <div class="uk-card uk-card-default uk-card-small">
+                            <div class="uk-card-header">
+                                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                    <div class="uk-width-auto">
+                                        <img class="uk-border-circle" width="40" height="40" src="https://html5css.ru/howto/img_avatar.png">
+                                    </div>
+                                    <div class="uk-width-expand">
+                                        <h3 class="uk-card-title uk-margin-remove-bottom">Оценил на: {{ item.rating }}</h3>
+                                        <p class="uk-text-meta uk-margin-remove-top">Пробег {{ item.mileage }} тыс.км.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-card-body uk-height-small uk-height-max-small">
+                                <p>{% if item.testimonial %}{{ item.testimonial|truncatechars:120 }}{% else %}
+                                    Пусто{% endif %}</p>
+                            </div>
+                            <div class="uk-card-footer">
+                                <div class="uk-flex uk-flex-between">
+                                    <a href="{% url 'model_spare_parts_reviews' item.car_model.id item.spare_part_id %}"
+                                       class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
+                                    {% comment %}
             <a href="{{ item.car_model.get_absolute_url }}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
           {% endcomment %}
-            <a href="{{ item.owner.profile.get_absolute_url }}" class="card-link">{{ item.owner.username }}</a>
-          </div>
-        </div>
-        </div>
-         {% empty %}
-            <p>Еще никто не оставил отзыв</p>
-        {% endfor %}
-      </div>
-        </div>
-     <h2>Автомобили, где установлена эта запчасть</h2>
-    <ol class="list-group list-group-numbered">
-        {% for item in cars %}
-            <li class="list-group-item"><a href="{{ item.car_model.get_absolute_url }}">
-                {{ item.car_brand }} {{ item.car_model }}</a></li>
-        {% empty %}
+                                    <a href="{{ item.owner.profile.get_absolute_url }}"
+                                       class="card-link">{{ item.owner.username }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Еще никто не оставил отзыв</p>
+                {% endfor %}
+            </div>
+            <h2 class="uk-h3">Автомобили, где установлена эта запчасть</h2>
+            <ul class="uk-list uk-list-decimal">
+                {% for item in cars %}
+                    <li><a href="{{ item.car_model.get_absolute_url }}">{{ item.car_brand }} {{ item.car_model }}</a>
+                    </li>
+                {% empty %}
+                    <p>Еще ничего нет</p>
+                {% endfor %}
+            </ul>
+        {% else %}
             <p>Еще ничего нет</p>
-        {% endfor %}
-    </ol>
-    {% else %}
-        <p>Еще ничего нет</p>
-    {% endif %}
+        {% endif %}
+    </div>
+
 {% endblock %}

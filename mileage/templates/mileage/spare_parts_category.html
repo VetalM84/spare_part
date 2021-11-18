@@ -17,6 +17,7 @@
 {% block body %}
 <div class="uk-container">
 <h1 class="uk-h2">{{ category_name }}</h1>
+ <div class="uk-column-1-2@s">
     <ul class="uk-list uk-list-decimal">
         {% for item in all_spare_parts %}
             <li><a href="{{ item.get_absolute_url }}">{{ item }}
@@ -26,5 +27,6 @@
             <p>Еще ничего нет</p>
         {% endfor %}
     </ul>
+</div>
 </div>
 {% endblock %}

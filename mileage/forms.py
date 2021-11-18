@@ -9,7 +9,7 @@ class AddCarBrandForm(forms.ModelForm):
         fields = ['brand']
         choice_field = forms.ChoiceField(choices=())
         widgets = {
-            'brand': forms.Select(attrs={'class': 'form-select'}),
+            'brand': forms.Select(attrs={'class': 'uk-select'}),
         }
 
 
@@ -18,7 +18,7 @@ class AddCarModelForm(forms.ModelForm):
         model = CarModel
         fields = ['model_name']
         widgets = {
-            'model_name': forms.Select(attrs={'class': 'form-select'}),
+            'model_name': forms.Select(attrs={'class': 'uk-select'}),
         }
 
 
@@ -27,30 +27,30 @@ class AddSparePartForm(forms.ModelForm):
         model = SparePart
         fields = '__all__'
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'id': 'sp_name'}),
-            'brand': forms.TextInput(attrs={'class': 'form-control', 'id': 'sp_brand'}),
-            'number': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
+            'name': forms.TextInput(attrs={'class': 'uk-input', 'id': 'sp_name'}),
+            'brand': forms.TextInput(attrs={'class': 'uk-input', 'id': 'sp_brand'}),
+            'number': forms.TextInput(attrs={'class': 'uk-input'}),
+            'category': forms.Select(attrs={'class': 'uk-select'}),
 
         }
 
 
 class AddReviewForm(forms.ModelForm):
     car_brand = forms.ModelChoiceField(queryset=CarBrand.objects.all(), label='Марка', empty_label='Выберите марку',
-                                       widget=forms.Select(attrs={'class': 'form-select'}))
+                                       widget=forms.Select(attrs={'class': 'uk-select'}))
     car_model = forms.ModelChoiceField(queryset=CarModel.objects.all(), label='Модель',
                                        empty_label='Сначала выберите марку',
-                                       widget=forms.Select(attrs={'class': 'form-select'}))
+                                       widget=forms.Select(attrs={'class': 'uk-select'}))
 
     class Meta:
         model = Review
         fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'testimonial', 'owner']
         widgets = {
-            'spare_part': forms.Select(attrs={'class': 'form-select'}),
-            'mileage': forms.NumberInput(attrs={'class': 'form-control'}),
-            'rating': forms.Select(attrs={'class': 'form-select'}),
-            'testimonial': forms.Textarea(attrs={'class': 'form-control', 'rows': '5'}),
-            'owner': forms.Select(attrs={'class': 'form-select'}),
+            'spare_part': forms.Select(attrs={'class': 'uk-select'}),
+            'mileage': forms.NumberInput(attrs={'class': 'uk-input'}),
+            'rating': forms.Select(attrs={'class': 'uk-select'}),
+            'testimonial': forms.Textarea(attrs={'class': 'uk-textarea', 'rows': '5'}),
+            'owner': forms.Select(attrs={'class': 'uk-select'}),
         }
 
     # def __init__(self, *args, **kwargs):
@@ -64,6 +64,6 @@ class ProfileEditForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'user': forms.Select(attrs={'class': 'form-select'}),
-            'drive2_link': forms.URLInput(attrs={'class': 'form-control'}),
+            'drive2_link': forms.URLInput(attrs={'class': 'uk-input'}),
             'cars': forms.SelectMultiple(),
         }
