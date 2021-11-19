@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='carbrand',
             name='logo',
-            field=models.ImageField(blank=True, upload_to='logos/', verbose_name="Эмблема'"),
+            field=models.ImageField(blank=True, upload_to='logos/', verbose_name="Эмблема"),
         ),
         migrations.AlterField(
             model_name='carbrand',
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             field=models.CharField(choices=[], max_length=40, unique=True, verbose_name='Марка'),
         ),
         migrations.AlterField(
-            model_name='testimonial',
+            model_name='review',
             name='testimonial',
             field=models.TextField(blank=True, max_length=1000, verbose_name='Отзыв'),
         ),
