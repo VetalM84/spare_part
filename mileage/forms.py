@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import Profile, SparePart, Review, CarModel, CarBrand
 
@@ -67,3 +68,9 @@ class ProfileEditForm(forms.ModelForm):
             'drive2_link': forms.URLInput(attrs={'class': 'uk-input'}),
             'cars': forms.SelectMultiple(),
         }
+
+    def clean_drive2_link(self):
+        drive2_link = self.cleaned_data['drive2_link']
+        if not drive2_link.startswith('https://www.drive2.ru/users/'):
+            raise ValidationError('Ссылка должна выглядеть так: https://www.drive2.ru/users/имя_пользователя')
+        return drive2_link
