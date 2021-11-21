@@ -7,7 +7,7 @@ from django.contrib import messages
 
 import simplejson
 
-from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory
+from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User
 from .forms import AddCarBrandForm, AddCarModelForm, AddReviewForm, AddSparePartForm
 
 
@@ -152,6 +152,11 @@ def get_user_profile(request, user_id):
     return render(request, 'mileage/user_profile.html', context)
 
 
+# def get_logged_in_user(request):
+#     if request.user.is_authenticated():
+#         return request.user.pk
+
+
 def get_chained_car_models(request, brand_id):
     """ получаем связанный список брендов и моделей авто """
     car_brand = CarBrand.objects.get(pk=brand_id)
@@ -164,13 +169,20 @@ def get_chained_car_models(request, brand_id):
 
 def add_review(request):
     """ добавляем отзыв """
+    user_id = User.objects.get(pk=request.user.id)
     if request.method == 'POST':
         # car_form = AddCarBrandForm(request.POST)
         # model_form = AddCarModelForm(request.POST)
         # spare_part_form = AddSparePartForm(request.POST)
         review_form = AddReviewForm(request.POST)
         if review_form.is_valid():
+            # назначаем полю owner id пользователя, который залогинился
+            review_form = review_form.save(commit=False)
+            review_form.owner = user_id
+
             review_form.save()
+            # TODO добавить уведомление о том, что отзыв добавлен
+            # TODO добавить редирект на страницу отзыва?
             return redirect('home')
     else:
         # car_form = AddCarBrandForm()
