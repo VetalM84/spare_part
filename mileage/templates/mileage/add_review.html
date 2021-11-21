@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block head %}
-    {% include 'inc/_autocomplete_links.html' %}
+{% include 'inc/_autocomplete_links.html' %}
 
 <title>{{ title }}</title>
 
@@ -30,6 +30,9 @@
     {% else %}
         <p>Зарегистрируйтесь или войдите</p>
     {% endif %}
+
+    {{ review_form.media }}
+
     <!-- chained forms -->
     <script>
     $(document).ready(function(){

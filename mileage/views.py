@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 
+from dal import autocomplete
 import simplejson
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User
@@ -157,16 +158,6 @@ def get_user_profile(request, user_id):
 #         return request.user.pk
 
 
-def get_chained_car_models(request, brand_id):
-    """ получаем связанный список брендов и моделей авто """
-    car_brand = CarBrand.objects.get(pk=brand_id)
-    car_models = CarModel.objects.filter(brand_id=car_brand.id)
-    models_dict = {}
-    for item in car_models:
-        models_dict[item.id] = item.model_name
-    return HttpResponse(simplejson.dumps(models_dict), content_type="application/json")
-
-
 def add_review(request):
     """ добавляем отзыв """
     user_id = User.objects.get(pk=request.user.id)
@@ -255,3 +246,35 @@ def get_spare_part(request, spare_part_id):
         'cars': cars,
     }
     return render(request, 'mileage/spare_part.html', context)
+
+
+def get_chained_car_models(request, brand_id):
+    """ получаем связанный список брендов и моделей авто """
+    car_brand = CarBrand.objects.get(pk=brand_id)
+    car_models = CarModel.objects.filter(brand_id=car_brand.id)
+    models_dict = {}
+    for item in car_models:
+        models_dict[item.id] = item.model_name
+    return HttpResponse(simplejson.dumps(models_dict), content_type="application/json")
+
+
+class SparePartAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return SparePart.objects.none()
+        spare_parts_list = SparePart.objects.all()
+        if self.q:
+            spare_parts_list = spare_parts_list.filter(name__istartswith=self.q)
+        return spare_parts_list
+
+
+# class CarBrandAutocomplete(autocomplete.Select2QuerySetView):
+#     def get_queryset(self):
+#         # Don't forget to filter out results depending on the visitor !
+#         if not self.request.user.is_authenticated:
+#             return CarBrand.objects.none()
+#         car_brands_list = CarBrand.objects.all()
+#         if self.q:
+#             car_brands_list = car_brands_list.filter(brand__istartswith=self.q)
+#         return car_brands_list

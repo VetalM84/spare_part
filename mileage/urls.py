@@ -10,10 +10,12 @@ urlpatterns = [
     path('categories/', get_all_spare_parts_categories, name='get_spare_parts_categories'),
     path('new_spare_part/', add_new_spare_part, name='new_spare_part'),
     path('add_review/', add_review, name='add_review_page'),
-    path('get_models/<int:brand_id>/', get_chained_car_models, name='ajax_get_chained_car_models'),
     path('search/', search, name='search_page'),
     path('user/<int:user_id>/', get_user_profile, name='user_profile_page'),
     path('spare_part/<int:spare_part_id>/', get_spare_part, name='get_spare_part'),
     path('model_spare_part/<int:model_id>/<int:spare_part_id>/', get_model_spare_parts_reviews,
          name='model_spare_parts_reviews'),
+    path('get_models/<int:brand_id>/', get_chained_car_models, name='ajax_get_chained_car_models'),
+    path('spare_part_autocomplete/', SparePartAutocomplete.as_view(), name='spare_part_autocomplete'),
 ]
+

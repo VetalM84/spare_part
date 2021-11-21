@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['sparepart.herokuapp.com', "localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
