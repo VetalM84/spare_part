@@ -9,7 +9,7 @@ from dal import autocomplete
 import simplejson
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User
-from .forms import AddCarBrandForm, AddCarModelForm, AddReviewForm, AddSparePartForm
+from .forms import AddReviewForm, AddSparePartForm
 
 
 def index(request):
@@ -162,9 +162,6 @@ def add_review(request):
     """ добавляем отзыв """
     user_id = User.objects.get(pk=request.user.id)
     if request.method == 'POST':
-        # car_form = AddCarBrandForm(request.POST)
-        # model_form = AddCarModelForm(request.POST)
-        # spare_part_form = AddSparePartForm(request.POST)
         review_form = AddReviewForm(request.POST)
         if review_form.is_valid():
             # назначаем полю owner id пользователя, который залогинился
@@ -176,19 +173,13 @@ def add_review(request):
             # TODO добавить редирект на страницу отзыва?
             return redirect('home')
     else:
-        # car_form = AddCarBrandForm()
-        # model_form = AddCarModelForm()
         review_form = AddReviewForm()
-        # spare_part_form = AddSparePartForm()
 
     # для автокомплита
     spare_parts = SparePart.objects.all().distinct()
 
     context = {
         'title': 'Добавить отзыв о запчасти',
-        # 'car_form': car_form,
-        # 'model_form': model_form,
-        # 'spare_part_form': spare_part_form,
         'review_form': review_form,
         'spare_parts': spare_parts,
     }

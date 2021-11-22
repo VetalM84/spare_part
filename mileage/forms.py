@@ -6,25 +6,6 @@ from dal import autocomplete
 from .models import Profile, SparePart, Review, CarModel, CarBrand
 
 
-class AddCarBrandForm(forms.ModelForm):
-    class Meta:
-        model = CarBrand
-        fields = ['brand']
-        choice_field = forms.ChoiceField(choices=())
-        widgets = {
-            'brand': forms.Select(attrs={'class': 'uk-select'}),
-        }
-
-
-class AddCarModelForm(forms.ModelForm):
-    class Meta:
-        model = CarModel
-        fields = ['model_name']
-        widgets = {
-            'model_name': forms.Select(attrs={'class': 'uk-select'}),
-        }
-
-
 class AddSparePartForm(forms.ModelForm):
     class Meta:
         model = SparePart
