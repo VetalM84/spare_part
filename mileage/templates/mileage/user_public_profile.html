@@ -18,7 +18,7 @@
 <h1 class="uk-h2">Профиль пользователя {{ profile.user.username }}</h1>
  <div class="uk-grid" uk-grid>
     <div>
-        <img class="uk-border-circle" width="100" height="100"  src="/{{ profile.avatar }}" alt="">
+        <img class="uk-border-circle" width="100" height="100"  src="{{ MEDIA_URL }}{{ profile.avatar }}" alt="">
     </div>
     <div>
         <ul class="uk-list">

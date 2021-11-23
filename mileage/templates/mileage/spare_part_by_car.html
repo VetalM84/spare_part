@@ -31,12 +31,13 @@
                             <div class="uk-grid-small uk-flex-middle" uk-grid>
                                 <div class="uk-width-auto">
                                     <a href="{% url 'user_public_profile_page' item.owner.id %}">
-                                        <img class="uk-border-circle" width="40" height="40" src="/{{ item.owner.profile.avatar }}" alt="">
+                                        <img class="uk-border-circle" width="40" height="40" src="{{ MEDIA_URL }}{{ item.owner.profile.avatar }}" alt="">
                                     </a>
                                 </div>
                                 <div class="uk-width-expand">
                                     <h3 class="uk-card-title uk-margin-remove-bottom">Оценил на: {{ item.rating }}</h3>
-                                    <p class="uk-text-meta uk-margin-remove-top">Пробег {{ item.mileage }} тыс.км.</p>
+                                    <p class="uk-text-meta uk-margin-remove">Пробег {{ item.mileage }} тыс.км.</p>
+                                    <p class="uk-text-meta uk-margin-remove-top">{{ item.date|date:"d E Y, H:i" }}</p>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +52,11 @@
                                 {% comment %}
             <a href="{{ item.car_model.get_absolute_url }}" class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>
           {% endcomment %}
-                                <a href="{% url 'user_public_profile_page' item.owner.id %}"
-                                   class="card-link">{{ item.owner.username }}</a>
+                                {% if request.user.id == item.owner.id %}
+                                    <a href="{% url 'user_profile_page' %}" class="card-link">{{ item.owner.username }}</a>
+                                {% else %}
+                                    <a href="{% url 'user_public_profile_page' item.owner.id %}" class="card-link">{{ item.owner.username }}</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

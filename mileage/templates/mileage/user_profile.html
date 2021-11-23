@@ -19,7 +19,7 @@
 {% if request.user.is_authenticated %}
  <div class="uk-grid" uk-grid>
     <div>
-        <img class="uk-border-circle" width="180" height="180"  src="/{{ user.profile.avatar }}" alt="">
+        <img class="uk-border-circle" width="180" height="180"  src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="">
     </div>
     <div>
         <ul class="uk-list">
