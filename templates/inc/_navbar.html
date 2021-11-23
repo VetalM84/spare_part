@@ -1,63 +1,68 @@
 <style>
-    .uk-navbar-nav>li>a {
+    .uk-navbar-nav > li > a {
         color: #e5e5e5;
     }
 </style>
 <div class="uk-container">
     <nav class="uk-navbar" uk-navbar>
-    <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav">
-            <li>
-                <a href="{% url 'home' %}">
-                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: home"></span>
-                    Главная
-                </a>
-            </li>
-        </ul>
-        <ul class="uk-navbar-nav">
-            <li>
-                <a href="{% url 'get_spare_parts_categories' %}">
-                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: cog"></span>
-                    Все запчасти
-                </a>
-            </li>
-        </ul>
-        <ul class="uk-navbar-nav">
-            <li>
-                <a href="{% url "add_review_page" %}">
-                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: comment"></span>
-                    Добавить отзыв
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="uk-navbar-right">
-
-        <div class="uk-navbar-item">
-            <div class="uk-inline">
-            <form method="GET" action="{% url 'search_page' %}">
-                <button class="uk-form-icon uk-form-icon-flip" uk-icon="icon: search"></button>
-                <input class="uk-input" type="search" name="q" id="q" placeholder="Поиск запчасти">
-           </form>
-            </div>
-       </div>
-         <ul class="uk-navbar-nav">
-            <li>
-                {% if request.user.is_authenticated %}
-                    <a uk-tooltip="Профиль" href="#">
-                        <img class="uk-border-circle" width="39" height="39" src="/{{ request.user.profile.avatar }}" alt="">
+        <div class="uk-navbar-left">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="{% url 'home' %}">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: home"></span>
+                        Главная
                     </a>
-                {% else %}
-                    <a uk-tooltip="Войти или зарегистрироваться" class="uk-icon-link" uk-icon="user" href="#"></a>
-                {% endif %}
-            </li>
-        </ul>
-         <ul class="uk-navbar-nav">
-            <li>
-                <a uk-tooltip="Выйти" class="uk-icon-link" uk-icon="sign-in" href="#"></a>
-            </li>
-        </ul>
+                </li>
+            </ul>
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="{% url 'get_spare_parts_categories' %}">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: cog"></span>
+                        Все запчасти
+                    </a>
+                </li>
+            </ul>
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="{% url "add_review_page" %}">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: comment"></span>
+                        Добавить отзыв
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="uk-navbar-right">
 
-    </div>
+            <div class="uk-navbar-item">
+                <div class="uk-inline">
+                    <form method="GET" action="{% url 'search_page' %}">
+                        <button class="uk-form-icon uk-form-icon-flip" uk-icon="icon: search"></button>
+                        <input class="uk-input" type="search" name="q" id="q" placeholder="Поиск запчасти">
+                    </form>
+                </div>
+            </div>
+            {% if request.user.is_authenticated %}
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a uk-tooltip="Добро пожаловать, {{ user.username }}" href="{% url 'user_profile_page' request.user.id %}">
+                            <img class="uk-border-circle" width="39" height="39"
+                                 src="/{{ request.user.profile.avatar }}" alt="">
+                        </a>
+                    </li>
+                </ul>
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a uk-tooltip="Выйти" class="uk-icon-link" uk-icon="sign-out" href="{% url 'logout' %}"></a>
+                    </li>
+                </ul>
+            {% else %}
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a uk-tooltip="Войти или зарегистрироваться" class="uk-icon-link" uk-icon="user"
+                           href="{% url 'login' %}"></a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
     </nav>
-  </div>
+</div>

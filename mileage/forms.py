@@ -1,9 +1,33 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
 from dal import autocomplete
 
 from .models import Profile, SparePart, Review, CarModel, CarBrand
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'uk-input'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'uk-input'}))
+
+
+class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'uk-input'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'uk-input'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'uk-input'}))
+    password2 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'uk-input'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+        # widgets = {
+        #     'username': forms.TextInput(attrs={'class': 'uk-input'}),
+        #     'email': forms.EmailInput(attrs={'class': 'uk-input'}),
+        #     'password1': forms.PasswordInput(attrs={'class': 'uk-input'}),
+        #     'password2': forms.PasswordInput(attrs={'class': 'uk-input'}),
+        # }
 
 
 class AddSparePartForm(forms.ModelForm):
@@ -15,7 +39,6 @@ class AddSparePartForm(forms.ModelForm):
             'brand': forms.TextInput(attrs={'class': 'uk-input', 'id': 'sp_brand'}),
             'number': forms.TextInput(attrs={'class': 'uk-input'}),
             'category': forms.Select(attrs={'class': 'uk-select'}),
-
         }
 
 

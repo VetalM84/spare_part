@@ -4,6 +4,9 @@ from .views import *
 
 urlpatterns = [
     path('', index, name='home'),
+    path('register/', user_register, name='register'),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
     path('car_models/<int:car_id>/', get_car_models, name='car_models_all'),
     path('model/<int:model_id>/', get_model_info, name='model_info'),
     path('category/<int:category_id>/', get_spare_parts_category, name='spare_parts_category'),

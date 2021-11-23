@@ -4,12 +4,46 @@ from django.db.models import Avg, Max, Min, Q, Count
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth import login, logout
+
 
 from dal import autocomplete
 import simplejson
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User
-from .forms import AddReviewForm, AddSparePartForm
+from .forms import AddReviewForm, AddSparePartForm, UserRegisterForm, UserLoginForm
+
+
+def user_register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Вы успешно зарегистрированы!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'mileage/register.html', {'form': form})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request, 'mileage/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 def index(request):

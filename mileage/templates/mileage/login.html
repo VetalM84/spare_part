@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ title }}</title>
+{% endblock %}
+
+{% block breadcrumb %}
+<div class="uk-container uk-padding-small">
+      <ul class="uk-breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><span>Логин</span></li>
+      </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="uk-container">
+<h1 class="uk-h2">Войти на сайт</h1>
+    <p>Еще не зарегистрированы? <a href="{% url 'register' %}">Регистрация</a></p>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="uk-button uk-button-primary" type="submit">Войти</button>
+    </form>
+
+</div>
+{% endblock %}
+
+
