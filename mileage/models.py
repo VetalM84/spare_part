@@ -81,6 +81,7 @@ class Review(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
     rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
     testimonial = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
+    # TODO добавить дату отзыва
 
     def __str__(self):
         return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
@@ -99,12 +100,13 @@ class Profile(models.Model):
     drive2_link = models.URLField(blank=True, verbose_name="Ссылка на профиль Drive2.ru")
     avatar = models.ImageField(upload_to='media/avatar/', verbose_name='Аватар',
                                default='media/avatar/default_avatar.jpg')
+    # TODO починить путь загрузки фото
 
     def __str__(self):
         return self.user.username
 
-    def get_absolute_url(self):
-        return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
+    # def get_absolute_url(self):
+    #     return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
 
     class Meta:
         verbose_name = 'Профиль'

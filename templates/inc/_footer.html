@@ -3,12 +3,12 @@
                 <ul class="uk-subnav uk-subnav-line uk-flex-center">
                     <li><a href="{% url 'home' %}">Главная</a></li>
                     <li><a href="{% url "add_review_page" %}">Добавить отзыв</a></li>
-                    <li><a href="{% if user.id %}{% url "user_profile_page" user.id %}{% else %}#need-login{% endif %}">Мой профиль</a></li>
+                    <li><a href="{% url "get_spare_parts_categories" %}">Все запчасти</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url "user_profile_page" %}">Мой профиль</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                {% endif %}
                 </ul>
-
-                <div class="uk-panel">
-                    <p>Made by <a href="http://www.yootheme.com">YOOtheme</a> with love and caffeine.<br class="uk-hidden-small">Licensed under <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>
-                    <a href="index.html"><img src="docs/images/logo_uikit.svg" width="90" height="30" title="UIkit" alt="UIkit"></a>
-                </div>
 
 </div>

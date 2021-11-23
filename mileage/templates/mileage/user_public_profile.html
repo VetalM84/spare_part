@@ -1,38 +1,36 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{{ title }}</title>
+<title>{{ title }} {{ profile.user.username }}</title>
 {% endblock %}
 
 {% block breadcrumb %}
 <div class="uk-container uk-padding-small">
       <ul class="uk-breadcrumb">
         <li><a href="{% url 'home' %}">Главная</a></li>
-        <li><span>Мой профиль</span></li>
+        <li><span>Профиль пользователя {{ profile.user.username }}</span></li>
       </ul>
 </div>
 {% endblock %}
 
 {% block body %}
 <div class="uk-container">
-<h1 class="uk-h2">Мой профиль</h1>
-{% if request.user.is_authenticated %}
+<h1 class="uk-h2">Профиль пользователя {{ profile.user.username }}</h1>
  <div class="uk-grid" uk-grid>
     <div>
-        <img class="uk-border-circle" width="180" height="180"  src="/{{ user.profile.avatar }}" alt="">
+        <img class="uk-border-circle" width="100" height="100"  src="/{{ profile.avatar }}" alt="">
     </div>
     <div>
         <ul class="uk-list">
-            <li>Логин: {{ user.username }}</li>
-            <li>Имя: {{ user.first_name }}</li>
-            <li>Фамилия: {{ user.last_name }}</li>
-            <li>E-mail: {{ user.email }}</li>
-            <li>Дата регистрации: {{ user.date_joined }}</li>
-            <li><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
+            <li>Логин: {{ profile.user.username }}</li>
+             <li>Дата регистрации: {{ profile.user.date_joined }}</li>
+           {% if profile.drive2_link %}
+                <li><a href="{{ profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>
-    <h3>Мои отзывы о запчастях</h3>
+    <h3>Отзывы этого пользователя</h3>
     <ul class="uk-list uk-list-decimal">
         {% for item in user_reviews %}
             {% comment %}
@@ -44,8 +42,5 @@
             <p>Еще ничего нет</p>
         {% endfor %}
     </ul>
-{% else %}
-    <p>Зарегистрируйтесь или войдите</p>
-{% endif %}
 </div>
 {% endblock %}

@@ -44,7 +44,7 @@
             {% if request.user.is_authenticated %}
                 <ul class="uk-navbar-nav">
                     <li>
-                        <a uk-tooltip="Добро пожаловать, {{ user.username }}" href="{% url 'user_profile_page' request.user.id %}">
+                        <a uk-tooltip="Добро пожаловать, {{ user.username }}" href="{% url 'user_profile_page' %}">
                             <img class="uk-border-circle" width="39" height="39"
                                  src="/{{ request.user.profile.avatar }}" alt="">
                         </a>

@@ -177,14 +177,26 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     return render(request, 'mileage/spare_part_by_car.html', context)
 
 
-def get_user_profile(request, user_id):
-    """ отображаем публичный профиль пользователя """
-    user_reviews = Review.objects.filter(owner_id=user_id).order_by('spare_part', 'spare_part__category_id')
+def get_user_profile(request):
+    """ отображаем личный профиль пользователя """
+    user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id')
     context = {
         'title': 'Мой профиль',
-        'user_reviews': user_reviews
+        'user_reviews': user_reviews,
     }
     return render(request, 'mileage/user_profile.html', context)
+
+
+def get_public_user_profile(request, user_id):
+    """ отображаем публичный профиль пользователя """
+    user = get_object_or_404(Profile, pk=user_id)
+    user_reviews = Review.objects.filter(owner_id=user.id).order_by('spare_part', 'spare_part__category_id')
+    context = {
+        'title': 'Публичный профиль пользователя',
+        'profile': user,
+        'user_reviews': user_reviews,
+    }
+    return render(request, 'mileage/user_public_profile.html', context)
 
 
 # def get_logged_in_user(request):
