@@ -213,11 +213,10 @@ def add_review(request):
             # назначаем полю owner id пользователя, который залогинился
             review_form = review_form.save(commit=False)
             review_form.owner = user_id
-
             review_form.save()
-            # TODO добавить уведомление о том, что отзыв добавлен
-            # TODO добавить редирект на страницу отзыва?
-            return redirect('home')
+            messages.success(request, 'Отзыв успешно опубликован!')
+            # редирект на страницу запчасти
+            return redirect('get_spare_part', spare_part_id=request.POST.get('spare_part'))
     else:
         review_form = AddReviewForm()
 
