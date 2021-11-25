@@ -84,17 +84,26 @@ WSGI_APPLICATION = 'spare_part.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'spare_part_db',
+#         'USER': 'sp_django',
+#         'PASSWORD': '11111111',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spare_part_db',
-        'USER': 'sp_django',
-        'PASSWORD': '11111111',
-        'HOST': '127.0.0.1',
+        'NAME': 'd65vbokt97dn93',
+        'USER': 'yslqvdtkzabkei',
+        'PASSWORD': 'ad26a696e236b71a1b0176da934024371663706b70fd600977e0d5b834ca68db',
+        'HOST': 'ec2-3-248-103-75.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -131,7 +140,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'spare_part/static')
+]
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

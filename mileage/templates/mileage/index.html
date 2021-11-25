@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<div class="uk-container uk-text-center">
+<div class="uk-container">
 <h1 class="uk-h2">{{ title }}</h1>
  <div class="uk-column-1-2@s uk-column-1-3@m uk-column-1-4@l uk-column-1-5@xl">
    <ul class="uk-list">
         {% for car in cars %}
             <li><a class="uk-link-text" href="{{ car.get_absolute_url }}">
-                {% if car.logo %}<img style="margin-right: 10px" src="{{ car.logo.url }}" alt="" width="70px">{% endif %}{{ car.brand }}
+                {% if car.logo %}<img style="margin-right: 10px" src="{{ car.logo.url }}" alt="" width="35px" height="35px">{% endif %}{{ car.brand }}
             </a></li>
         {% endfor %}
     </ul>
