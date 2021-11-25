@@ -82,6 +82,8 @@ class Review(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
     rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
     testimonial = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
+    likes = models.ManyToManyField(User, related_name='like', default=None, blank=True)
+    like_count = models.BigIntegerField(default='0')
     date = models.DateTimeField(default=now, verbose_name='Дата')
 
     def __str__(self):

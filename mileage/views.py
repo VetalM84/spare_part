@@ -2,7 +2,7 @@ from django.db.models.functions import Length
 from django.shortcuts import render, redirect
 from django.db.models import Avg, Max, Min, Q, Count
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout
 
@@ -314,3 +314,22 @@ class SparePartAutocomplete(autocomplete.Select2QuerySetView):
 #         if self.q:
 #             car_brands_list = car_brands_list.filter(brand__istartswith=self.q)
 #         return car_brands_list
+
+
+def like(request):
+    if request.POST.get('action') == 'post':
+        result = ''
+        print(request.POST.get('review_id'))
+        review_id = int(request.POST.get('review_id'))
+        review = get_object_or_404(Review, id=review_id)
+        if review.likes.filter(id=request.user.id).exists():
+            review.likes.remove(request.user)
+            review.like_count -= 1
+            result = review.like_count
+            review.save()
+        else:
+            review.likes.add(request.user)
+            review.like_count += 1
+            result = review.like_count
+            review.save()
+        return JsonResponse({'result': result, })

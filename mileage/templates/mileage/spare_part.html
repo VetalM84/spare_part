@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>{{ title }}</title>
 {% endblock %}
 
@@ -44,6 +45,12 @@
                                         <p class="uk-text-meta uk-margin-remove">Пробег {{ item.mileage }} тыс.км.</p>
                                         <p class="uk-text-meta uk-margin-remove-top">{{ item.date|date:"d E Y, H:i" }}</p>
                                    </div>
+{#                                 TODO добавить проверку авторизации #}
+                                    <div class="uk-width-auto">
+                                        {% csrf_token %}
+                                        <span id="like_count">{{item.like_count}}</span>
+                                        <button class="uk-button-link" id="like-button" value="{{item.id}}" uk-icon="heart"></button>
+                                   </div>
                                 </div>
                             </div>
                             <div class="uk-card-body uk-height-small uk-height-max-small">
@@ -81,5 +88,24 @@
             <p>Еще ничего нет</p>
         {% endif %}
     </div>
+<script>
+ $(document).on('click', '#like-button', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '{% url "like" %}',
+      data: {
+        review_id: $('#like-button').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        action: 'post'
+      },
+      success: function (json) {
+        document.getElementById("like_count").innerHTML = json['result']
+      },
+      error: function (xhr, errmsg, err) {
 
+      }
+    });
+  })
+</script>
 {% endblock %}

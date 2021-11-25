@@ -21,5 +21,6 @@ urlpatterns = [
          name='model_spare_parts_reviews'),
     path('get_models/<int:brand_id>/', get_chained_car_models, name='ajax_get_chained_car_models'),
     path('spare_part_autocomplete/', SparePartAutocomplete.as_view(), name='spare_part_autocomplete'),
+    path('like/', like, name='like'),
 ]
 
