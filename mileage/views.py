@@ -10,7 +10,7 @@ from django.contrib.auth import login, logout
 from dal import autocomplete
 import simplejson
 
-from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User
+from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User, Comment
 from .forms import AddReviewForm, AddSparePartForm, UserRegisterForm, UserLoginForm
 
 
@@ -256,8 +256,9 @@ def get_spare_part(request, spare_part_id):
     # список пробегов запчасти
     spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by(Length('testimonial').desc())
     # или такой запрос
-    # spare_parts_mileages = spare_part.review_set.all().order_by('-mileage')
-
+    # spare_parts_reviews = spare_part.review_set.all().order_by('-mileage')
+    # rev = Comment.objects.filter(review__spare_part_id=spare_part)
+    # print(rev)
     max_mileage = spare_parts_reviews.aggregate(Max('mileage'))
     min_mileage = spare_parts_reviews.aggregate(Min('mileage'))
     avg_mileage = spare_parts_reviews.aggregate(Avg('mileage'))
@@ -317,9 +318,8 @@ class SparePartAutocomplete(autocomplete.Select2QuerySetView):
 
 
 def like(request):
+    """ лайки к отзывам """
     if request.POST.get('action') == 'post':
-        result = ''
-        print(request.POST.get('review_id'))
         review_id = int(request.POST.get('review_id'))
         review = get_object_or_404(Review, id=review_id)
         if review.likes.filter(id=request.user.id).exists():
@@ -333,3 +333,20 @@ def like(request):
             result = review.like_count
             review.save()
         return JsonResponse({'result': result, })
+
+
+def add_comment(request):
+    """ комментарии к отзывам """
+    if request.POST.get('action') == 'post':
+        review_id = int(request.POST.get('review_id'))
+        review = get_object_or_404(Review, id=review_id)
+        comment_text = request.POST.get('comment_text')
+        if len(comment_text) > 20:
+            comment = Comment.objects.create(user=request.user, review=review, comments_text=comment_text)
+            result = review.comment_set.all().count()
+            comment.save()
+            message = 'Отзыв добавлен!'
+        else:
+            result = ''
+            message = 'Ошибка! Введите минимум 20 символов.'
+        return JsonResponse({'result': result, 'message': message})

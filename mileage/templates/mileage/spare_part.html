@@ -46,10 +46,13 @@
                                         <p class="uk-text-meta uk-margin-remove-top">{{ item.date|date:"d E Y, H:i" }}</p>
                                    </div>
 {#                                 TODO добавить проверку авторизации #}
+{#                                TODO скрыть лайки на своих отзывах? #}
                                     <div class="uk-width-auto">
                                         {% csrf_token %}
-                                        <span id="like_count">{{item.like_count}}</span>
-                                        <button class="uk-button-link" id="like-button" value="{{item.id}}" uk-icon="heart"></button>
+                                        <span id="like_count_{{item.id}}">{{item.like_count}}</span>
+                                        <button class="uk-button-link like" data-id="{{item.id}}" value="{{item.id}}" uk-icon="heart"></button>
+                                        <span id="comments_count_{{ item.id}}">{{item.comments_count}}</span>
+                                        <button class="uk-button-link" uk-icon="comments"></button>
                                    </div>
                                 </div>
                             </div>
@@ -67,6 +70,11 @@
                                         <a href="{% url 'user_public_profile_page' item.owner.id %}" class="card-link">{{ item.owner.username }}</a>
                                     {% endif %}
                                 </div>
+                            <div>
+                                <textarea class="uk-textarea comment-text" rows="2" id="comment-text-{{item.id}}" placeholder="Текст комментария"></textarea>
+                                <button class="uk-button uk-button-primary uk-button-small add-comment-btn" data-id="{{item.id}}" value="{{item.id}}">Добавить</button>
+                                <span id="message_{{ item.id}}"></span>
+                           </div>
                             </div>
                         </div>
                     </div>
@@ -88,24 +96,51 @@
             <p>Еще ничего нет</p>
         {% endif %}
     </div>
-<script>
- $(document).on('click', '#like-button', function (e) {
+<script type="text/javascript">
+$(document).ready(function() {
+ $(document).on('click', '.like', function (e) {
+    var id = $(this).attr('data-id');
     e.preventDefault();
     $.ajax({
       type: 'POST',
       url: '{% url "like" %}',
       data: {
-        review_id: $('#like-button').val(),
+        review_id: id,
         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
         action: 'post'
       },
       success: function (json) {
-        document.getElementById("like_count").innerHTML = json['result']
+          document.getElementById("like_count_"+id).innerHTML = json['result']
       },
       error: function (xhr, errmsg, err) {
 
       }
     });
   })
+
+  $(document).on('click', '.add-comment-btn', function (e) {
+    var id = $(this).attr('data-id');
+    e.preventDefault();
+    function eraseText() { document.getElementById("comment-text-"+id).value = ""; }
+    $.ajax({
+      type: 'POST',
+      url: '{% url "add_comment" %}',
+      data: {
+        review_id: id,
+        comment_text: $("#comment-text-"+id).val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        action: 'post'
+      },
+      success: function (json) {
+        document.getElementById("comments_count_"+id).innerHTML = json['result']
+        document.getElementById("message_"+id).innerHTML = json['message']
+        eraseText()
+      },
+      error: function (xhr, errmsg, err) {
+
+      }
+    });
+  })
+})
 </script>
 {% endblock %}

@@ -82,8 +82,8 @@ class Review(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
     rating = models.CharField(max_length=1, choices=RATING_VALUES, verbose_name="Рейтинг", default=3)
     testimonial = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
-    likes = models.ManyToManyField(User, related_name='like', default=None, blank=True)
-    like_count = models.BigIntegerField(default='0')
+    likes = models.ManyToManyField(User, related_name='like', default=None, blank=True, verbose_name="Лайки")
+    like_count = models.BigIntegerField(default='0', verbose_name="Кол-во лайков")
     date = models.DateTimeField(default=now, verbose_name='Дата')
 
     def __str__(self):
@@ -96,6 +96,20 @@ class Review(models.Model):
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ['spare_part']
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name="Пользователь")
+    review = models.ForeignKey('Review', on_delete=models.PROTECT, verbose_name="Отзыв")
+    comments_text = models.TextField(blank=False, max_length=300, verbose_name="Текст комментария")
+    date = models.DateTimeField(default=now, verbose_name='Дата')
+
+    def __str__(self):
+        return ' '.join([self.user.username, self.review.spare_part.name])
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
 
 class Profile(models.Model):
