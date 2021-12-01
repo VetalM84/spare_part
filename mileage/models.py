@@ -93,9 +93,6 @@ class Review(models.Model):
     def __str__(self):
         return ' '.join([self.spare_part.name, self.spare_part.brand, self.spare_part.number])
 
-    # def get_absolute_url(self):
-    #     return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
-
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
@@ -124,9 +121,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-    # def get_absolute_url(self):
-    #     return reverse_lazy('user_profile_page', kwargs={'user_id': self.pk})
 
     class Meta:
         verbose_name = 'Профиль'

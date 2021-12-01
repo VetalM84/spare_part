@@ -128,7 +128,6 @@ def add_new_spare_part(request):
         form = AddSparePartForm()
 
     # для автокомплита
-    # TODO попытаться оптимизировать запросы
     spare_parts_names = SparePart.objects.order_by('name').distinct('name')
     spare_parts_brands = SparePart.objects.order_by('brand').distinct('brand')
     context = {
@@ -190,10 +189,10 @@ def get_private_user_profile(request):
         profile_form = ProfileEditForm()
 
     user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id')
-    user_liked = Review.objects.filter(likes=request.user)
+    # user_liked = Review.objects.filter(likes=request.user)
 
     context = {
-        'user_liked': user_liked,
+        # 'user_liked': user_liked,
         'user_form': user_form,
         'profile_form': profile_form,
         'title': 'Мой профиль',
@@ -248,6 +247,7 @@ def add_review(request):
 
 def search(request):
     """ поиск по названию или номеру запчасти """
+    query, search_result = '', []
     if request.method == 'GET':
         query = request.GET.get('q')
         if query:
@@ -270,7 +270,7 @@ def get_spare_part(request, spare_part_id):
 
     # список пробегов запчасти
     spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id)\
-        .order_by('-date', Length('testimonial').desc())
+        .order_by('-date', '-like_count', Length('testimonial').desc())
     # или такой запрос
     # spare_parts_reviews = spare_part.review_set.all().order_by('-mileage')
 
@@ -283,13 +283,8 @@ def get_spare_part(request, spare_part_id):
     # список авто, где стоит эта запчасть
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
         distinct('car_brand__brand', 'car_model__model_name')
-    # unique_brands = CarBrand.objects.filter(review__in=cars).distinct()
-    # unique_brands = CarBrand.objects.filter(review__in=reviews).distinct()
 
-    # comments = Comment.objects.filter(review__spare_part_id=spare_part)
-    # print(comments)
     context = {
-        # 'comments': comments,
         'spare_part': spare_part,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],

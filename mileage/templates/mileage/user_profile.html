@@ -37,29 +37,29 @@
         </div>
     </div>
  </div>
- <div class="uk-grid" uk-grid>
-    <div>
-        <img class="uk-border-circle" width="180" height="180"  src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="">
-    </div>
-    <div>
-        <ul class="uk-list">
-            <li>Логин: {{ user.username }}</li>
-            <li>Имя: {{ user.first_name }}</li>
-            <li>Фамилия: {{ user.last_name }}</li>
-            <li>E-mail: {{ user.email }}</li>
-            <li>Дата регистрации: {{ user.date_joined }}</li>
-            <li><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>
-        </ul>
-    </div>
-</div>
-    <h3>Мои лайки</h3>
-    <ul class="uk-list uk-list-decimal">
-        {% for item in user_liked %}
-            <li>{{ item }}</li>
-        {% empty %}
-            <p>Еще ничего нет</p>
-        {% endfor %}
-    </ul>
+{# <div class="uk-grid" uk-grid>#}
+{#    <div>#}
+{#        <img class="uk-border-circle" width="180" height="180"  src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="">#}
+{#    </div>#}
+{#    <div>#}
+{#        <ul class="uk-list">#}
+{#            <li>Логин: {{ user.username }}</li>#}
+{#            <li>Имя: {{ user.first_name }}</li>#}
+{#            <li>Фамилия: {{ user.last_name }}</li>#}
+{#            <li>E-mail: {{ user.email }}</li>#}
+{#            <li>Дата регистрации: {{ user.date_joined }}</li>#}
+{#            <li><a href="{{ user.profile.drive2_link }}" rel="nofollow" target="_blank">Ссылка на профиль Drive2.ru</a></li>#}
+{#        </ul>#}
+{#    </div>#}
+{#</div>#}
+{#    <h3>Мои лайки</h3>#}
+{#    <ul class="uk-list uk-list-decimal">#}
+{#        {% for item in user_liked %}#}
+{#            <li>{{ item }}</li>#}
+{#        {% empty %}#}
+{#            <p>Еще ничего нет</p>#}
+{#        {% endfor %}#}
+{#    </ul>#}
 
     <h3>Мои отзывы о запчастях</h3>
     <ul class="uk-list uk-list-decimal">
