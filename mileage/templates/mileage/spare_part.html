@@ -60,6 +60,12 @@
                                     Пусто{% endif %}</p>
                             </div>
                             <div class="uk-card-footer">
+                                {% if item.jpeg %}
+                                    <div uk-lightbox>
+                                        Фото: <a class="uk-inline" href="{{ MEDIA_URL }}{{ item.jpeg }}"><img src="{{ item.jpeg.thumbnail.url }}" alt=""></a>
+                                    </div>
+                                    <hr>
+                                {% endif %}
                                 <div class="uk-flex uk-flex-between">
                                     <a href="{% url 'model_spare_parts_reviews' item.car_model.id item.spare_part_id %}"
                                        class="card-link">{{ item.car_brand }} {{ item.car_model }}</a>

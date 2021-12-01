@@ -5,10 +5,12 @@ from django.dispatch import receiver
 from django.urls import reverse_lazy
 from django.utils.timezone import now
 
+from stdimage import JPEGField
+
 
 class CarBrand(models.Model):
     brand = models.CharField(max_length=40, choices=(), unique=True, verbose_name="Марка")
-    logo = models.ImageField(upload_to='media/logo/', blank=True, verbose_name="Эмблема")
+    logo = models.ImageField(upload_to='logo/', blank=True, verbose_name="Эмблема")
 
     def __str__(self):
         return self.brand
@@ -84,6 +86,8 @@ class Review(models.Model):
     testimonial = models.TextField(max_length=1000, blank=True, verbose_name="Отзыв")
     likes = models.ManyToManyField(User, related_name='like', default=None, blank=True, verbose_name="Лайки")
     like_count = models.BigIntegerField(default='0', verbose_name="Кол-во лайков")
+    jpeg = JPEGField(upload_to='reviews/', blank=True, variations={'full': (800, 600), 'thumbnail': (60, 60)},
+                     delete_orphans=True)
     date = models.DateTimeField(default=now, verbose_name='Дата')
 
     def __str__(self):

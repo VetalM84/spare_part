@@ -21,7 +21,7 @@
 <h1 class="uk-h2">{{ title }}</h1>
 
     {% if request.user.is_authenticated %}
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <p>В каталоге нет нужной запчасти? <a href="{% url "new_spare_part" %}">Добавить новую</a></p>
         {{ review_form.as_p }}

@@ -42,10 +42,11 @@ class AddReviewForm(forms.ModelForm):
     car_model = forms.ModelChoiceField(queryset=CarModel.objects.all(), label='Модель',
                                        empty_label='Сначала выберите марку',
                                        widget=forms.Select(attrs={'class': 'uk-select'}))
+    jpeg = forms.ImageField(label='Фото', required=False, widget=forms.FileInput)
 
     class Meta:
         model = Review
-        fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'testimonial']
+        fields = ['spare_part', 'mileage', 'car_brand', 'car_model', 'rating', 'testimonial', 'jpeg']
         widgets = {
             'spare_part': autocomplete.ModelSelect2(url='spare_part_autocomplete', attrs={'class': 'uk-select'}),
             # 'spare_part': forms.Select(attrs={'class': 'uk-select'}),

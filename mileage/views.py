@@ -223,7 +223,7 @@ def add_review(request):
     """ добавляем отзыв """
     user_id = User.objects.get(pk=request.user.id)
     if request.method == 'POST':
-        review_form = AddReviewForm(request.POST)
+        review_form = AddReviewForm(request.POST, request.FILES)
         if review_form.is_valid():
             # назначаем полю owner id пользователя, который залогинился
             review_form = review_form.save(commit=False)
@@ -269,7 +269,8 @@ def get_spare_part(request, spare_part_id):
     spare_part = get_object_or_404(SparePart, pk=spare_part_id)
 
     # список пробегов запчасти
-    spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by(Length('testimonial').desc())
+    spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id)\
+        .order_by('-date', Length('testimonial').desc())
     # или такой запрос
     # spare_parts_reviews = spare_part.review_set.all().order_by('-mileage')
 
