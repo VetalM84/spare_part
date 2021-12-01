@@ -100,7 +100,7 @@ class Review(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name="Пользователь")
-    review = models.ForeignKey('Review', on_delete=models.PROTECT, verbose_name="Отзыв")
+    review = models.ForeignKey('Review', related_name='comment', on_delete=models.PROTECT, verbose_name="Отзыв")
     comments_text = models.TextField(blank=False, max_length=300, verbose_name="Текст комментария")
     date = models.DateTimeField(default=now, verbose_name='Дата')
 
