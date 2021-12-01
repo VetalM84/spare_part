@@ -22,6 +22,26 @@
         <img class="uk-border-circle" width="180" height="180"  src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="">
     </div>
     <div>
+        <div class="uk-margin-small" uk-form-custom>
+        <form method="post">
+            {% csrf_token %}
+            <label for="id_first_name">Имя</label><input class="uk-input" type="text" name="first_name" value="{{ user.first_name }}" id="id_first_name">
+            <label for="id_last_name">Фамилия</label><input class="uk-input" type="text" name="last_name" value="{{ user.last_name }}" id="id_last_name">
+            <label for="id_username">Логин</label><input class="uk-input" type="text" name="username" value="{{ user.username }}" required="" id="id_username">
+            <label for="id_drive2_link">Ссылка на профиль Drive2.ru</label><input class="uk-input" type="text" name="drive2_link" value="{{ user.profile.drive2_link }}" id="id_drive2_link">
+            <label for="id_email">Email</label><input class="uk-input" type="email" name="email" value="{{ user.email }}" id="id_email">
+            <label for="id_avatar">Аватар</label><input type="file" name="avatar" value="{{ user.avatar }}" id="id_avatar">
+            <button class="uk-button uk-button-default" type="button" tabindex="-1">Выбрать файл</button>
+            <button class="uk-button uk-button-primary" type="submit">Сохранить</button>
+        </form>
+        </div>
+    </div>
+ </div>
+ <div class="uk-grid" uk-grid>
+    <div>
+        <img class="uk-border-circle" width="180" height="180"  src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="">
+    </div>
+    <div>
         <ul class="uk-list">
             <li>Логин: {{ user.username }}</li>
             <li>Имя: {{ user.first_name }}</li>
@@ -32,6 +52,15 @@
         </ul>
     </div>
 </div>
+    <h3>Мои лайки</h3>
+    <ul class="uk-list uk-list-decimal">
+        {% for item in user_liked %}
+            <li>{{ item }}</li>
+        {% empty %}
+            <p>Еще ничего нет</p>
+        {% endfor %}
+    </ul>
+
     <h3>Мои отзывы о запчастях</h3>
     <ul class="uk-list uk-list-decimal">
         {% for item in user_reviews %}

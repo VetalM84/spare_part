@@ -11,7 +11,7 @@ from dal import autocomplete
 import simplejson
 
 from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User, Comment
-from .forms import AddReviewForm, AddSparePartForm, UserRegisterForm, UserLoginForm
+from .forms import AddReviewForm, AddSparePartForm, UserRegisterForm, UserLoginForm, ProfileEditForm, UserEditForm
 
 
 def user_register(request):
@@ -177,10 +177,25 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     return render(request, 'mileage/spare_part_by_car.html', context)
 
 
-def get_user_profile(request):
+def get_private_user_profile(request):
     """ отображаем личный профиль пользователя """
+    if request.method == 'POST':
+        user_form = UserEditForm(data=request.POST, instance=request.user)
+        profile_form = ProfileEditForm(data=request.POST, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm()
+        profile_form = ProfileEditForm()
+
     user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id')
+    user_liked = Review.objects.filter(likes=request.user)
+
     context = {
+        'user_liked': user_liked,
+        'user_form': user_form,
+        'profile_form': profile_form,
         'title': 'Мой профиль',
         'user_reviews': user_reviews,
     }
@@ -257,8 +272,7 @@ def get_spare_part(request, spare_part_id):
     spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id).order_by(Length('testimonial').desc())
     # или такой запрос
     # spare_parts_reviews = spare_part.review_set.all().order_by('-mileage')
-    # rev = Comment.objects.filter(review__spare_part_id=spare_part)
-    # print(rev)
+
     max_mileage = spare_parts_reviews.aggregate(Max('mileage'))
     min_mileage = spare_parts_reviews.aggregate(Min('mileage'))
     avg_mileage = spare_parts_reviews.aggregate(Avg('mileage'))
@@ -269,10 +283,12 @@ def get_spare_part(request, spare_part_id):
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
         distinct('car_brand__brand', 'car_model__model_name')
     # unique_brands = CarBrand.objects.filter(review__in=cars).distinct()
-    # reviews = spare_part.review_set.all()
     # unique_brands = CarBrand.objects.filter(review__in=reviews).distinct()
 
+    # comments = Comment.objects.filter(review__spare_part_id=spare_part)
+    # print(comments)
     context = {
+        # 'comments': comments,
         'spare_part': spare_part,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
@@ -343,7 +359,7 @@ def add_comment(request):
         comment_text = request.POST.get('comment_text')
         if len(comment_text) > 20:
             comment = Comment.objects.create(user=request.user, review=review, comments_text=comment_text)
-            result = review.comment_set.all().count()
+            result = review.comment.all().count()
             comment.save()
             message = 'Отзыв добавлен!'
         else:
