@@ -74,9 +74,9 @@ def get_model_info(request, model_id):
     """ получаем информацию о конкретной модели авто """
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
-    # отображаем только уникальные запчасти
+    # отображаем только уникальные запчасти у которых есть отзыв к этой модели
     spare_parts = Review.objects.filter(car_model_id=model_id).order_by('spare_part__name').\
-        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number')
+        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number').select_related('spare_part')
     context = {
         'spare_parts': spare_parts,
         'car_model': car_model,
@@ -144,8 +144,8 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     spare_part = SparePart.objects.get(pk=spare_part_id)
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
-
-    spare_parts = Review.objects.filter(car_model_id=model_id, spare_part_id=spare_part_id).order_by('-mileage')
+    spare_parts = Review.objects.filter(car_model_id=model_id, spare_part_id=spare_part_id).order_by('-mileage').\
+        select_related('car_brand', 'car_model', 'owner')
     max_mileage = spare_parts.aggregate(Max('mileage'))
     min_mileage = spare_parts.aggregate(Min('mileage'))
     avg_mileage = spare_parts.aggregate(Avg('mileage'))
@@ -157,7 +157,8 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     similar_spare_parts = Review.objects.filter(
         spare_part__name__icontains=spare_part.name, spare_part__category_id=spare_part.category.id,
         car_model__id=model_id).order_by('spare_part__name', 'spare_part__brand', 'spare_part__number').\
-        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number')
+        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number').\
+        select_related('spare_part')
     # similar_spare_parts = Review.objects.filter(spare_part__name__icontains=spare_parts.first().
     #                                             spare_part.name).exclude(spare_part_id=spare_part_id)
     context = {
@@ -188,7 +189,8 @@ def get_private_user_profile(request):
         user_form = UserEditForm()
         profile_form = ProfileEditForm()
 
-    user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id')
+    user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id').\
+        select_related('spare_part')
     # user_liked = Review.objects.filter(likes=request.user)
 
     context = {
@@ -204,7 +206,8 @@ def get_private_user_profile(request):
 def get_public_user_profile(request, user_id):
     """ отображаем публичный профиль пользователя """
     user = get_object_or_404(Profile, pk=user_id)
-    user_reviews = Review.objects.filter(owner_id=user.id).order_by('spare_part', 'spare_part__category_id')
+    user_reviews = Review.objects.filter(owner_id=user.id).order_by('spare_part', 'spare_part__category_id').\
+        select_related('spare_part')
     context = {
         'title': 'Публичный профиль пользователя',
         'profile': user,
@@ -270,7 +273,8 @@ def get_spare_part(request, spare_part_id):
 
     # список пробегов запчасти
     spare_parts_reviews = Review.objects.filter(spare_part_id=spare_part_id)\
-        .order_by('-date', '-like_count', Length('testimonial').desc())
+        .order_by('-date', '-like_count', Length('testimonial').desc())\
+        .select_related('car_brand', 'car_model', 'owner')
     # или такой запрос
     # spare_parts_reviews = spare_part.review_set.all().order_by('-mileage')
 
@@ -282,7 +286,7 @@ def get_spare_part(request, spare_part_id):
 
     # список авто, где стоит эта запчасть
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
-        distinct('car_brand__brand', 'car_model__model_name')
+        distinct('car_brand__brand', 'car_model__model_name').select_related('car_brand', 'car_model')
 
     context = {
         'spare_part': spare_part,
