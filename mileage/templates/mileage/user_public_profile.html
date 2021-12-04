@@ -31,8 +31,8 @@
     </div>
 </div>
     <h3>Отзывы этого пользователя</h3>
-    <ul class="uk-list uk-list-decimal">
-        {% for item in user_reviews %}
+    <ul class="uk-list">
+        {% for item in page_obj.object_list %}
             {% comment %}
             # TODO починить ссылку
             <li><a href="{% url 'spare_parts_reviews' item.car_model_id item.spare_part_id %}">
@@ -44,3 +44,4 @@
     </ul>
 </div>
 {% endblock %}
+

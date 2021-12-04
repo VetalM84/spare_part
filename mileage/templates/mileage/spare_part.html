@@ -26,7 +26,7 @@
 
             <h2 class="uk-h3">Отзывы об этой запчасти</h2>
             <div>
-                {% for item in spare_parts_reviews %}
+                {% for item in page_obj.object_list %}
                         <div class="card-border uk-card uk-card-default uk-card-small uk-width-expand uk-margin-medium">
                             <div class="uk-card-header">
                                 <div class="uk-grid-small uk-flex-middle" uk-grid>

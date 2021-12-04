@@ -62,16 +62,16 @@
 {#    </ul>#}
 
     <h3>Мои отзывы о запчастях</h3>
-    <ul class="uk-list uk-list-decimal">
-        {% for item in user_reviews %}
+    <ul class="uk-list">
+    {% for item in page_obj.object_list %}
             {% comment %}
             # TODO починить ссылку
             <li><a href="{% url 'spare_parts_reviews' item.car_model_id item.spare_part_id %}">
             {% endcomment %}
             <li><a href="{% url 'get_spare_part' item.spare_part.id %}">{{ item }}</a> - {{ item.mileage }} тыс.км.</li>
-        {% empty %}
-            <p>Еще ничего нет</p>
-        {% endfor %}
+    {% empty %}
+        <p>Еще ничего нет</p>
+    {% endfor %}
     </ul>
 {% else %}
     <p>Зарегистрируйтесь или войдите</p>

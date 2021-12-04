@@ -17,7 +17,7 @@
 <div class="uk-container">
 <h1 class="uk-h2">{{ title }} "{{ query }}"</h1>
     <ul class="uk-list uk-list-decimal">
-    {% for item in search_result %}
+    {% for item in page_obj.object_list %}
         <li><a href="{{ item.get_absolute_url }}">{{ item }}
             {% if item.cnt > 0 %}<span class="uk-badge"> {{ item.cnt }}</span>{% else %}{% endif %}
         </a></li>

@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout
-
+from django.core.paginator import Paginator
 
 from dal import autocomplete
 import simplejson
@@ -189,16 +189,20 @@ def get_private_user_profile(request):
         user_form = UserEditForm()
         profile_form = ProfileEditForm()
 
-    user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id').\
-        select_related('spare_part')
+    user_reviews = Review.objects.filter(owner_id=request.user.id).order_by('spare_part', 'spare_part__category_id')\
+        .select_related('spare_part')
     # user_liked = Review.objects.filter(likes=request.user)
+
+    paginator = Paginator(user_reviews, 15)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
     context = {
         # 'user_liked': user_liked,
+        'page_obj': page_obj,
         'user_form': user_form,
         'profile_form': profile_form,
         'title': 'Мой профиль',
-        'user_reviews': user_reviews,
     }
     return render(request, 'mileage/user_profile.html', context)
 
@@ -208,17 +212,18 @@ def get_public_user_profile(request, user_id):
     user = get_object_or_404(Profile, pk=user_id)
     user_reviews = Review.objects.filter(owner_id=user.id).order_by('spare_part', 'spare_part__category_id').\
         select_related('spare_part')
+
+    paginator = Paginator(user_reviews, 15)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
     context = {
+        'page_obj': page_obj,
         'title': 'Публичный профиль пользователя',
         'profile': user,
         'user_reviews': user_reviews,
     }
     return render(request, 'mileage/user_public_profile.html', context)
-
-
-# def get_logged_in_user(request):
-#     if request.user.is_authenticated():
-#         return request.user.pk
 
 
 def add_review(request):
@@ -259,7 +264,13 @@ def search(request):
         else:
             query = ''
             search_result = []
+
+    paginator = Paginator(search_result, 15)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
     context = {
+        'page_obj': page_obj,
         'title': 'Результаты поиска по запросу',
         'query': query,
         'search_result': search_result,
@@ -288,14 +299,19 @@ def get_spare_part(request, spare_part_id):
     cars = spare_part.review_set.all().order_by('car_brand__brand', 'car_model__model_name').\
         distinct('car_brand__brand', 'car_model__model_name').select_related('car_brand', 'car_model')
 
+    paginator = Paginator(spare_parts_reviews, 10)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
     context = {
+        'page_obj': page_obj,
         'spare_part': spare_part,
         'min_mileage': min_mileage['mileage__min'],
         'max_mileage': max_mileage['mileage__max'],
         'avg_mileage': avg_mileage['mileage__avg'],
         'avg_rating': avg_rating['rating__avg'],
         'records_count': records_count,
-        'spare_parts_reviews': spare_parts_reviews,
+        # 'spare_parts_reviews': spare_parts_reviews,
         'cars': cars,
     }
     return render(request, 'mileage/spare_part.html', context)
