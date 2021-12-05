@@ -162,6 +162,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 INTERNAL_IPS = ["127.0.0.1", ]
 
+LOGIN_URL = 'login'
+
 CACHES = {
     'default': {
         # 'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',

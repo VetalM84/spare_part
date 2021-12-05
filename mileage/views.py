@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
+from django.contrib.auth.decorators import login_required
 
 from dal import autocomplete
 import simplejson
@@ -116,6 +117,7 @@ def get_all_spare_parts_categories(request):
     return render(request, 'mileage/all_spare_parts_categories.html', context)
 
 
+@login_required
 def add_new_spare_part(request):
     """ добавляем новую запчасть в каталог """
     if request.method == 'POST':
@@ -185,6 +187,7 @@ def get_model_spare_parts_reviews(request, model_id, spare_part_id):
     return render(request, 'mileage/spare_part_by_car.html', context)
 
 
+@login_required
 def get_private_user_profile(request):
     """ отображаем личный профиль пользователя """
     if request.method == 'POST':
@@ -234,6 +237,7 @@ def get_public_user_profile(request, user_id):
     return render(request, 'mileage/user_public_profile.html', context)
 
 
+@login_required
 def add_review(request):
     """ добавляем отзыв """
     user_id = User.objects.get(pk=request.user.id)
