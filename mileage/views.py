@@ -385,12 +385,16 @@ def add_comment(request):
         review_id = int(request.POST.get('review_id'))
         review = get_object_or_404(Review, id=review_id)
         comment_text = request.POST.get('comment_text')
-        if len(comment_text) > 20:
-            comment = Comment.objects.create(user=request.user, review=review, comments_text=comment_text)
-            result = review.comment.all().count()
-            comment.save()
-            message = 'Отзыв добавлен!'
+        if request.user.is_authenticated:
+            if len(comment_text) > 20:
+                comment = Comment.objects.create(user=request.user, review=review, comments_text=comment_text)
+                result = review.comment.all().count()
+                comment.save()
+                message = 'Отзыв добавлен!'
+            else:
+                result = ''
+                message = 'Ошибка! Введите минимум 20 символов.'
         else:
             result = ''
-            message = 'Ошибка! Введите минимум 20 символов.'
+            message = 'Войдите, чтобы оставить комментарий'
         return JsonResponse({'result': result, 'message': message})
