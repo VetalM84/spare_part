@@ -14,7 +14,12 @@
     <div>
 
     <div class="uk-section uk-padding-remove-vertical uk-section-default uk-background-secondary">
-        {% include 'inc/_navbar.html' %}
+        {% load cache %}
+        {% cache 30 navbar request.user.pk %}
+        {% block navbar %}
+            {% include 'inc/_navbar.html' %}
+        {% endblock %}
+        {% endcache %}
     </div>
 
     <div class="uk-section uk-padding-remove-vertical uk-section-default">

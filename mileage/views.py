@@ -6,6 +6,8 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from dal import autocomplete
 import simplejson
@@ -46,6 +48,7 @@ def user_logout(request):
     return redirect('login')
 
 
+@cache_page(30)
 def index(request):
     """ получаем список всех марок авто на домашней странице"""
     cars = CarBrand.objects.all()
@@ -56,6 +59,7 @@ def index(request):
     return render(request, template_name='mileage/index.html', context=context)
 
 
+@cache_page(30)
 def get_car_models(request, car_id):
     """ получаем список моделей авто """
     car_brand = CarBrand.objects.get(pk=car_id)
@@ -75,8 +79,8 @@ def get_model_info(request, model_id):
     car_model = CarModel.objects.get(pk=model_id)
     car_brand = CarBrand.objects.get(pk=car_model.brand_id)
     # отображаем только уникальные запчасти у которых есть отзыв к этой модели
-    spare_parts = Review.objects.filter(car_model_id=model_id).order_by('spare_part__name').\
-        distinct('spare_part__name', 'spare_part__brand', 'spare_part__number').select_related('spare_part')
+    spare_parts = Review.objects.filter(car_model_id=model_id).order_by('spare_part__name')\
+        .distinct('spare_part__name', 'spare_part__brand', 'spare_part__number').select_related('spare_part')
     context = {
         'spare_parts': spare_parts,
         'car_model': car_model,
@@ -100,7 +104,11 @@ def get_spare_parts_category(request, category_id):
 
 def get_all_spare_parts_categories(request):
     """ выводим список всех категорий автозапчастей """
-    categories = SparePartCategory.objects.all().order_by('pk').annotate(cnt=Count('sparepart'))
+    # кешируем запрос
+    categories = cache.get('categories')
+    if not categories:
+        categories = SparePartCategory.objects.all().order_by('pk').annotate(cnt=Count('sparepart'))
+        cache.set('categories', categories, 30)
     context = {
         'title': 'Все категории запчастей',
         'categories': categories,
