@@ -35,6 +35,13 @@
 
     <!-- chained forms -->
     <script>
+    $('.captcha').click(function () {
+        $.getJSON("/captcha/refresh/", function (result) {
+            $('.captcha').attr('src', result['image_url']);
+            $('#id_captcha_0').val(result['key'])
+        });
+    });
+
     $(document).ready(function(){
     $('select[name=car_model]').children().remove();
     $('select[name=car_model]').append('<option id="">Сначала выберите марку</option>');
@@ -58,6 +65,7 @@
         return false;
     })
 });
+
     </script>
     <!-- chained forms END -->
 </div>

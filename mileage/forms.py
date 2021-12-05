@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django.contrib.auth.models import User
 
 from dal import autocomplete
+from captcha.fields import CaptchaField
 
 from .models import Profile, SparePart, Review, CarModel, CarBrand
 
@@ -43,6 +44,7 @@ class AddReviewForm(forms.ModelForm):
                                        empty_label='Сначала выберите марку',
                                        widget=forms.Select(attrs={'class': 'uk-select'}))
     jpeg = forms.ImageField(label='Фото', required=False, widget=forms.FileInput)
+    captcha = CaptchaField(label='Антибот')
 
     class Meta:
         model = Review
