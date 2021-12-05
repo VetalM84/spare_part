@@ -46,12 +46,14 @@
                                         <p class="uk-text-meta uk-margin-remove">Пробег {{ item.mileage }} тыс.км.</p>
                                         <p class="uk-text-meta uk-margin-remove-top">{{ item.date|date:"d E Y, H:i" }}</p>
                                     </div>
-                                    {#                                 TODO добавить проверку авторизации #}
                                     <div class="uk-width-auto">
                                         {% csrf_token %}
                                         <span id="like_count_{{ item.id }}">{{ item.like_count }}</span>
-                                        <button class="uk-button-link like" data-id="{{ item.id }}"
-                                                value="{{ item.id }}" uk-icon="heart"></button>
+                                        {% if request.user.is_authenticated %}
+                                            <button class="uk-button-link like" data-id="{{ item.id }}" value="{{ item.id }}" uk-icon="heart"></button>
+                                        {% else %}
+                                            <span uk-icon="heart"></span>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -127,22 +129,6 @@
                                         </div>
                                     </li>
                                 </ul>
-                                {#                            <div id="modal" uk-modal>#}
-                                {#                                <div class="uk-modal-dialog">#}
-                                {#                                <button class="uk-modal-close-default" type="button" uk-close></button>#}
-                                {#                                <div class="uk-modal-header">#}
-                                {#                                    <h2 class="uk-modal-title">Добавить комментарий к отзыву</h2>#}
-                                {#                                </div>#}
-                                {#                                <div class="uk-modal-body">#}
-                                {#                                    <textarea class="uk-textarea comment-text" rows="5" id="comment-text-{{item.id}}" placeholder="Текст комментария"></textarea>#}
-                                {#                                </div>#}
-                                {#                                <div class="uk-modal-footer uk-text-right">#}
-                                {#                                    <span class="uk-text-small" id="message_{{ item.id }}"></span>#}
-                                {#                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Отмена</button>#}
-                                {#                                    <button class="uk-button uk-button-primary add-comment-btn" data-id="{{item.id}}" value="{{item.id}}">Добавить</button>#}
-                                {#                                </div>#}
-                                {#                                </div>#}
-                                {#                            </div>#}
                             </div>
                         </div>
                 {% empty %}
