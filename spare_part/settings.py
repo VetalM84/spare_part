@@ -172,3 +172,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+RECAPTCHA_PUBLIC_KEY = 'test'
+RECAPTCHA_PRIVATE_KEY = 'test'
