@@ -1,12 +1,12 @@
-from django import forms
-from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
-from django.contrib.auth.models import User
-
-from dal import autocomplete
 from captcha.fields import ReCaptchaField
+from dal import autocomplete
+from django import forms
+from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
+                                       UserCreationForm)
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
-from .models import Profile, SparePart, Review, CarModel, CarBrand
+from .models import CarBrand, CarModel, Profile, Review, SparePart
 
 
 class UserLoginForm(AuthenticationForm):

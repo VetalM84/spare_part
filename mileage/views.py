@@ -1,20 +1,20 @@
-from django.db.models.functions import Length
-from django.shortcuts import render, redirect
-from django.db.models import Avg, Max, Min, Q, Count
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, JsonResponse
+import simplejson
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.core.paginator import Paginator
-from django.views.decorators.cache import cache_page
-from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.db.models import Avg, Count, Max, Min, Q
+from django.db.models.functions import Length
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import cache_page
 
-from dal import autocomplete
-import simplejson
-
-from .models import Review, CarModel, CarBrand, SparePart, SparePartCategory, Profile, User, Comment
-from .forms import AddReviewForm, AddSparePartForm, UserRegisterForm, UserLoginForm, ProfileEditForm, UserEditForm
+from .forms import (AddReviewForm, AddSparePartForm, ProfileEditForm,
+                    UserEditForm, UserLoginForm, UserRegisterForm)
+from .models import (CarBrand, CarModel, Comment, Profile, Review, SparePart,
+                     SparePartCategory, User)
 
 
 def user_register(request):

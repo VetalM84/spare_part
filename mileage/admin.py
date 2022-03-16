@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import SparePart, Review, Profile, CarModel, CarBrand, SparePartCategory
+from .models import (CarBrand, CarModel, Profile, Review, SparePart,
+                     SparePartCategory)
 
 
 class CarBrandAdmin(admin.ModelAdmin):
