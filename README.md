@@ -14,8 +14,8 @@ What I have implemented in this project:
 3. Django templates, template tags, template filters, forms.
 4. Django Admin.
 5. Extended User Model using proxy.
-6. Decorators (@login_required).
-7. CACHES.
+6. Decorators (@login_required, @cache_page).
+7. CACHES (@cache_page, cache queries).
 8. Google reCaptcha.
 9. Chained fields using django-autocomplete-light.
 10. Django Debug Toolbar.
