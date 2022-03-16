@@ -84,12 +84,6 @@ WSGI_APPLICATION = 'spare_part.wsgi.application'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-# DATABASES = {
-#     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'spare_part_db',
 #         'USER': 'sp_django',
@@ -101,10 +95,10 @@ WSGI_APPLICATION = 'spare_part.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd65vbokt97dn93',
-        'USER': 'yslqvdtkzabkei',
-        'PASSWORD': 'ad26a696e236b71a1b0176da934024371663706b70fd600977e0d5b834ca68db',
-        'HOST': 'ec2-3-248-103-75.eu-west-1.compute.amazonaws.com',
+        'NAME': 'd58r5fkunqhd31',
+        'USER': 'eptjvhusxgdbfk',
+        'PASSWORD': 'e4672ddf92b606584c7cc7860dbe8d4da6c995efebeba4e958de30ec869004c7',
+        'HOST': 'ec2-52-31-201-170.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
