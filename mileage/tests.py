@@ -1,31 +1,74 @@
-from django.test import TestCase
-from django.urls import reverse
 from unittest import skip
 
-from mileage.models import User, Profile, CarBrand, CarModel
+from django.test import TestCase
+from django.urls import reverse
+
 from mileage.forms import ProfileEditForm
+from mileage.models import (
+    CarBrand,
+    CarModel,
+    Comment,
+    Profile,
+    Review,
+    SparePart,
+    SparePartCategory,
+    User,
+)
 
 
 class ViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
+        User.objects.create_user(username="test", password="test")
+
         CarBrand.objects.create(brand="Audi")
-        CarBrand.objects.create(brand="BMW")
         CarBrand.objects.create(brand="Mercedes")
+
         CarModel.objects.create(model_name="A6", brand_id=1)
         CarModel.objects.create(model_name="Q5", brand_id=1)
-        CarModel.objects.create(model_name="S600", brand_id=3)
+        CarModel.objects.create(model_name="S600", brand_id=2)
+
+        SparePartCategory.objects.create(name="Двигатель")
+        SparePartCategory.objects.create(name="Ходовая")
+
+        SparePart.objects.create(
+            name="Поршень",
+            brand="STR",
+            number="4545451",
+            category=SparePartCategory.objects.get(name="Двигатель"),
+        )
+        SparePart.objects.create(
+            name="Шаровая опора",
+            brand="TRW",
+            number="0121 ER",
+            category=SparePartCategory.objects.get(name="Ходовая"),
+        )
+        Review.objects.create(
+            spare_part=SparePart.objects.get(name="Поршень"),
+            mileage=25,
+            car_brand=CarBrand.objects.get(brand="Audi"),
+            car_model=CarModel.objects.get(model_name="A6"),
+            owner=User.objects.get(username="test"),
+            rating=5,
+            testimonial="Отличный поршень",
+        )
         print("setUpClass")
 
     @classmethod
     def tearDownClass(cls):
         print("tearDown")
 
+    def test_get_all_spare_parts_categories(self):
+        response = self.client.get(path=reverse("get_spare_parts_categories"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "mileage/all_spare_parts_categories.html")
+        self.assertEqual(len(response.context["categories"]), 2)
+
     def test_index(self):
-        response = self.client.get(reverse("home"))
+        response = self.client.get(path=reverse("home"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "mileage/index.html")
-        self.assertEqual(len(response.context["cars"]), 3)
+        self.assertEqual(len(response.context["cars"]), 2)
 
     def test_get_car_models(self):
         url = reverse("car_models_all", args=(CarBrand.objects.get(brand="Audi").id,))
@@ -34,9 +77,16 @@ class ViewsTest(TestCase):
         self.assertTemplateUsed(response, "mileage/car_models.html")
         self.assertEqual(len(response.context["car_models"]), 2)
 
+    def test_get_model_info(self):
+        url = reverse("model_info", args=(CarModel.objects.get(model_name="A6").id,))
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "mileage/model_info.html")
+        self.assertContains(response, "Все для Audi A6")
+        self.assertEqual(len(response.context["spare_parts"]), 1)
+
 
 class UserTest(TestCase):
-    # fixtures = ["fixture.json"]
 
     # @classmethod
     # def setUpTestData(cls):
