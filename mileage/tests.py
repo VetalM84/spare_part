@@ -68,6 +68,14 @@ class ViewsTest(TestCase):
     def tearDown(self):
         print("tearDown")
 
+    def test_search(self):
+        """Test search with GET query."""
+        url = reverse("search_page")
+        response = self.client.get(path=url, data={"q": "Поршень"})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "mileage/search.html")
+        self.assertTrue(SparePart.objects.all().count(), 1)
+
     def test_add_review_success(self):
         """Test add a new review success."""
         response = self.client.post(
