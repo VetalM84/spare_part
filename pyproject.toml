@@ -4,6 +4,7 @@ exclude = '(\.git|\.mypy_cache|venv|migrations|settings.py)'
 target_version = ["py39"]
 
 [tool.isort]
+skip = [".gitignore", ".dockerignore", "settings.py", "migrations", "venv"]
 combine_as_imports = true
 include_trailing_comma = true
 line_length = 100
