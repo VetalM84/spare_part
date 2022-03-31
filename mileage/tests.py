@@ -60,19 +60,35 @@ class ViewsTest(TestCase):
     def tearDownClass(cls):
         print("tearDown")
 
-    # def setUp(self):
-    #     self.users = get_user_model().objects.all()
-    #     self.logged_user = self.client.force_login(user=self.user)
-    #     print(f"Юзер сетап {self.user.is_authenticated}")
-    #     print("setUp")
-    #
-    # def tearDown(self):
-    #     print("tearDown")
+    def setUp(self):
+        self.user = User.objects.get(username="test")
+        self.client.force_login(user=self.user)
+        print("setUp")
+
+    def tearDown(self):
+        print("tearDown")
+
+    def test_add_review_success(self):
+        """Test add a new review success."""
+        response = self.client.post(
+            path=reverse("add_review_page"),
+            data={
+                "spare_part": 1,
+                "mileage": 25,
+                "car_brand": 1,
+                "car_model": 1,
+                "rating": 4,
+                "testimonial": "Отличный поршень",
+            },
+            follow=True,
+        )
+        # print(response.content.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "mileage/add_review.html")
+        self.assertTrue(Review.objects.all().count(), 2)
 
     def test_add_new_spare_part_fail(self):
         """Test add a new spare part fail."""
-        user = User.objects.get(username="test")
-        self.client.force_login(user=user)
         response = self.client.post(
             path=reverse("new_spare_part"),
             data={
@@ -90,8 +106,6 @@ class ViewsTest(TestCase):
 
     def test_add_new_spare_part_success(self):
         """Test add a new spare part with success."""
-        user = User.objects.get(username="test")
-        self.client.force_login(user=user)
         response = self.client.post(
             path=reverse("new_spare_part"),
             data={
